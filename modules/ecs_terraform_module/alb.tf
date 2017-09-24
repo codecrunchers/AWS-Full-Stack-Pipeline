@@ -20,6 +20,10 @@ resource "aws_alb_target_group" "alb_target_groups" {
     matcher             = "200-499"                                                #debug
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   depends_on = ["aws_alb.alb"]
 }
 

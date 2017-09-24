@@ -42,7 +42,18 @@ variable "vpc_id" {}
 
 variable "cloudwatch_log_handle" {}
 
-variable "private_subnets" {}
-variable "public_subnets" {}
-variable "private_subnet_ids" {}
-variable "public_subnet_ids" {}
+variable "private_subnets" {
+  type = "list"
+}
+
+variable "public_subnets" {
+  type = "list"
+}
+
+variable "private_subnet_ids" {
+  type = "list"
+}
+
+variable "public_subnet_ids" {
+  type = "list"
+}
