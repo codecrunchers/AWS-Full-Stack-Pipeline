@@ -1,7 +1,7 @@
 #Auto Scale Policy for Containers
 
 resource "aws_autoscaling_policy" "autoscale_policy" {
-  name                   = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-scale-policy"
+  name                   = "${var.environment}-${var.name}-scale-policy"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -9,7 +9,7 @@ resource "aws_autoscaling_policy" "autoscale_policy" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "reserved_mem_alarm" {
-  alarm_name          = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-Mem-Alarm"
+  alarm_name          = "${var.environment}-${var.name}-Mem-Alarm"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "2"
   metric_name         = "MemoryReservation"

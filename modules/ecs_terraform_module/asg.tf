@@ -1,6 +1,6 @@
 resource "aws_autoscaling_group" "ecs_asgrp" {
-  name                      = "${var.stack_details["env"]}-ecs-asgrp"
-  vpc_zone_identifier       = ["${var.subnets_amber}"]
+  name                      = "${var.environment}-${var.name}-ecs-asgrp"
+  vpc_zone_identifier       = ["${var.private_subnet_ids}"]
   min_size                  = "${var.ecs_params["min_instances"]}"
   max_size                  = "${var.ecs_params["max_instances"]}"
   desired_capacity          = "${var.ecs_params["desired_instances"]}"
@@ -17,14 +17,14 @@ resource "aws_autoscaling_group" "ecs_asgrp" {
   tags = [
     {
       key                 = "Name"
-      value               = "${var.stack_details["env"]} Pipeline Container Host"
+      value               = "${var.environment}-${var.name} Pipeline Container Host"
       propagate_at_launch = true
     },
   ]
 }
 
 resource "aws_launch_configuration" "ecs_launch_config" {
-  name_prefix          = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-ecs"
+  name_prefix          = "${var.environment}-${var.name}-ecs-launch_configuration"
   security_groups      = ["${aws_security_group.ecs_instance_sg.id}"]
   image_id             = "${lookup(var.ecs_amis, var.aws_region)}"
   instance_type        = "${var.ecs_params["instance_type"]}"
@@ -45,8 +45,9 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user-data-ecsami.instance")}"
 
   vars {
-    efs_url = "${aws_efs_mount_target.efs_mt.0.dns_name}"
-    p9_env  = "${var.stack_details["env"]}"
+    efs_url      = "${var.efs_mount_dns}"
+    p9_env       = "${var.environment}"
+    cluster_name = "${var.cluster_name}"
   }
 }
 

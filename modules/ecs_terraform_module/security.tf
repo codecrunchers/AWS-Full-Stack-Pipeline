@@ -1,44 +1,9 @@
 #TODO: This has all been imported
-resource "aws_security_group" "pipeline-storage" {
-  description = "Production EFS Persistence"
-  vpc_id      = "${var.vpc_id}"
-
-  tags {
-    Name = "EFS for Pipeline"
-  }
-}
-
-resource "aws_security_group_rule" "pipeline-storage" {
-  security_group_id = "${aws_security_group.pipeline-storage.id}"
-  type              = "ingress"
-  protocol          = "tcp"
-  from_port         = 0
-  to_port           = 65535
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "pipeline-storage-1" {
-  security_group_id = "${aws_security_group.pipeline-storage.id}"
-  type              = "ingress"
-  protocol          = "tcp"
-  from_port         = 0
-  to_port           = 65535
-  ipv6_cidr_blocks  = ["::/0"]
-}
-
-resource "aws_security_group_rule" "pipeline-storage-2" {
-  security_group_id = "${aws_security_group.pipeline-storage.id}"
-  type              = "egress"
-  protocol          = -1
-  from_port         = 0
-  to_port           = 0
-  cidr_blocks       = ["0.0.0.0/0"]
-}
 
 resource "aws_security_group" "alb_sg" {
   description = "Controls access to the application ALB"
   vpc_id      = "${var.vpc_id}"
-  name        = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-ecs-sg"
+  name        = "${var.environment}-${var.name}-ecs-sg"
 
   ingress {
     protocol  = "tcp"
@@ -66,7 +31,7 @@ resource "aws_security_group" "alb_sg" {
 resource "aws_security_group" "ecs_instance_sg" {
   description = "Controls direct access to application instances"
   vpc_id      = "${var.vpc_id}"
-  name        = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-ecs-instsg"
+  name        = "${var.environment}-${var.name}-ecs-instsg"
 
   ingress {
     protocol  = "tcp"

@@ -30,6 +30,6 @@ cloud-init-per once chmod_jh chmod 777 /efs/nexus-data
 
 #!/bin/bash
 # Set any ECS agent configuration options
-echo "ECS_CLUSTER=${p9_env}-p9-pipeline" >> /etc/ecs/ecs.config
+echo "ECS_CLUSTER=${cluster_name}" >> /etc/ecs/ecs.config
 
 --==BOUNDARY==--

@@ -38,6 +38,7 @@ module "pipeline_ecs" {
   efs_mount_dns = "${module.pipeline_storage.efs_mount_dns}"
   environment   = "${var.environment}"
   dns_zone      = "${var.dns_zone}"
+  cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"
 
   whitelist_cidr_blocks = [
     "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",

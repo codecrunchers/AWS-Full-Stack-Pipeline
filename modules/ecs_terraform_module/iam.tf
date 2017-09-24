@@ -1,11 +1,11 @@
 resource "aws_iam_role_policy" "instance_role_policy" {
-  name   = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-instance-role"
+  name   = "${var.environment}-${var.name}-instance-role"
   role   = "${aws_iam_role.app_instance_role.name}"
   policy = "${data.template_file.instance_profile.rendered}"
 }
 
 resource "aws_iam_role" "ecs_service_role" {
-  name = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-role"
+  name = "${var.environment}-${var.name}-ecs-service-role"
 
   assume_role_policy = <<EOF
 {
@@ -25,7 +25,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "ecs_service_policy" {
-  name = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-service-policy"
+  name = "${var.environment}-${var.name}-ecs-service-policy"
   role = "${aws_iam_role.ecs_service_role.name}"
 
   policy = <<EOF
@@ -50,7 +50,7 @@ EOF
 }
 
 resource "aws_iam_role" "app_instance_role" {
-  name = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-app-instance-role"
+  name = "${var.environment}-${var.name}-app-instance-role"
 
   assume_role_policy = <<EOF
 {
@@ -70,6 +70,6 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "app_instance_profile" {
-  name = "${var.stack_details["env"]}-${var.ecs_params["ecs_name"]}-app-instance-profile"
+  name = "${var.environment}-${var.name}-app-instance-profile"
   role = "${aws_iam_role.app_instance_role.name}"
 }
