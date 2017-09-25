@@ -2,6 +2,8 @@ variable "name" {}
 variable "environment" {}
 variable "cluster_name" {}
 
+variable "ssh_key" {}
+
 variable "ecs_params" {
   type = "map"
 }

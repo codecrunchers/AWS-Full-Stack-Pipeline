@@ -1,75 +1,48 @@
-resource "aws_iam_role_policy" "instance_role_policy" {
-  name   = "${var.environment}-${var.name}-instance-role"
-  role   = "${aws_iam_role.app_instance_role.name}"
-  policy = "${data.template_file.instance_profile.rendered}"
+/* ecs iam role and policies */
+resource "aws_iam_role" "ecs_role" {
+  name               = "${var.ecs_cluster_name}-ecs-role"
+  assume_role_policy = "${file("${path.module}/policies/ecs-role.json")}"
 }
 
-resource "aws_iam_role" "ecs_service_role" {
-  name = "${var.environment}-${var.name}-ecs-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2008-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+/* ecs service scheduler role */
+resource "aws_iam_role_policy" "ecs_service_role_policy" {
+  name   = "${var.ecs_cluster_name}-ecs-service-role-policy"
+  policy = "${file("${path.module}/policies/ecs-service-role-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
 }
 
-resource "aws_iam_role_policy" "ecs_service_policy" {
-  name = "${var.environment}-${var.name}-ecs-service-policy"
-  role = "${aws_iam_role.ecs_service_role.name}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:Describe*",
-        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-        "elasticloadbalancing:DeregisterTargets",
-        "elasticloadbalancing:Describe*",
-        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-        "elasticloadbalancing:RegisterTargets"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+/* ec2 container instance role & policy */
+resource "aws_iam_role_policy" "ecs_instance_role_policy" {
+  name   = "${var.ecs_cluster_name}-ecs-instance-role-policy"
+  policy = "${file("${path.module}/policies/ecs-instance-role-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
 }
 
-resource "aws_iam_role" "app_instance_role" {
-  name = "${var.environment}-${var.name}-app-instance-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+/* ec2 container instance policy to access ecr */
+resource "aws_iam_role_policy" "ecs_ecr_role_policy" {
+  name   = "${var.ecs_cluster_name}-ecs-ecr-role-policy"
+  policy = "${file("${path.module}/policies/ecs-ecr-role-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
 }
 
-resource "aws_iam_instance_profile" "app_instance_profile" {
-  name = "${var.environment}-${var.name}-app-instance-profile"
-  role = "${aws_iam_role.app_instance_role.name}"
+/* ec2 container instance policy to access sqs */
+resource "aws_iam_role_policy" "ecs_sqs_access_policy" {
+  name   = "${var.ecs_cluster_name}-ecs-sqs-access-policy"
+  policy = "${file("${path.module}/policies/ecs-sqs-access-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
+}
+
+/* ec2 container instance policy to access sqs */
+resource "aws_iam_role_policy" "ecs_kms_decrypt_policy" {
+  name   = "${var.ecs_cluster_name}-ecs-kms-decrypt-policy"
+  policy = "${file("${path.module}/policies/ecs-kms-decrypt-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
+}
+
+/**
+ * IAM profile to be used in auto-scaling launch configuration.
+ */
+resource "aws_iam_instance_profile" "ecs" {
+  path  = "/"
+  roles = ["${aws_iam_role.ecs_role.name}"]
 }

@@ -51,6 +51,6 @@ resource "aws_security_group" "ecs_instance_sg" {
   }
 
   tags {
-    Name = "ECS/EC2 Allow Range 8000->9999"
+    Name = "ECS/EC2 Allow Range ${var.low_port} to ${var.high_port}"
   }
 }

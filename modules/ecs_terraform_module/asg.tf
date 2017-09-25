@@ -27,8 +27,9 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   name_prefix          = "${var.environment}-${var.name}-ecs-launch_configuration"
   security_groups      = ["${aws_security_group.ecs_instance_sg.id}"]
   image_id             = "${lookup(var.ecs_amis, var.aws_region)}"
+  key_name             = "${var.ssh_key}"
   instance_type        = "${var.ecs_params["instance_type"]}"
-  iam_instance_profile = "${aws_iam_instance_profile.app_instance_profile.id}"
+  iam_instance_profile = "${aws_iam_instance_profile.ecs.id}"
   enable_monitoring    = true
 
   #  user_data                   = "#!/bin/bash\necho ECS_CLUSTER='${aws_ecs_cluster.ecs.id}' > /etc/ecs/ecs.config"

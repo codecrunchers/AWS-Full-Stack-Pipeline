@@ -5,7 +5,7 @@ ecs_params = {
   max_instances     = 2
   desired_instances = 1
   ecs_name          = "pipeline"
-  instance_type     = "t2.medium"
+  instance_type     = "t2.micro"
 }
 
 dns_zone = "paddle-planner.com"
