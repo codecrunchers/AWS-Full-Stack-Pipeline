@@ -39,13 +39,14 @@ module "pipeline_ecs" {
   environment   = "${var.environment}"
   dns_zone      = "${var.dns_zone}"
   cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"
+  ssh_key       = "pipeline"
 
   whitelist_cidr_blocks = [
     "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",
     "37.228.251.43/32",
   ]
 
-  low_port              = 8081
+  low_port              = 8080
   high_port             = 9000
   vpc_id                = "${module.vpc_pipeline.id}"
   ecs_params            = "${var.ecs_params}"
@@ -82,7 +83,7 @@ module "pipeline_storage" {
 }
 
 module "jenkins" {
-  source              = "modules/ecs_service_terraform_module"
+  source              = "modules/jenkins_terraform_module"
   environment         = "${var.environment}"
   name                = "${var.name}"
   pipeline_definition = "${var.jenkins_pipeline_definition}"

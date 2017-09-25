@@ -7,7 +7,7 @@ output "cluster_id" {
 }
 
 output "iam_role" {
-  value = "${aws_iam_role.ecs_service_role.id}"
+  value = "${aws_iam_role.ecs_role.id}"
 }
 
 output "target_group_id" {

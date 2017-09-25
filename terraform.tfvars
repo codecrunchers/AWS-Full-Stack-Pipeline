@@ -5,7 +5,7 @@ ecs_params = {
   max_instances     = 2
   desired_instances = 1
   ecs_name          = "pipeline"
-  instance_type     = "t2.micro"
+  instance_type     = "t2.small"
 }
 
 dns_zone = "paddle-planner.com"
@@ -39,6 +39,10 @@ jenkins_pipeline_definition = {
   name                       = "jenkins"
   host_port_to_expose        = "8080"
   container_port_to_expose   = "8080"
-  instance_memory_allocation = "2048"
+  instance_memory_allocation = "512"
   instance_count             = "1"
+
+  env_vars = {
+    JENKINS_OPTS = "--prefix=/jenkins"
+  }
 }

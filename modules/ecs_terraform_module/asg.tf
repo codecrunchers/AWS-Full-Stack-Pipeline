@@ -10,17 +10,27 @@ resource "aws_autoscaling_group" "ecs_asgrp" {
   health_check_grace_period = 1000
   target_group_arns         = ["${aws_alb_target_group.alb_target_groups.*.arn}"]
 
+  tag {
+    key                 = "Name"
+    value               = "${var.cluster_name}-ecs-instance"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Stream"
+    value               = "Stream Tag"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "ServerRole"
+    value               = "ECS"
+    propagate_at_launch = true
+  }
+
   lifecycle {
     create_before_destroy = true
   }
-
-  tags = [
-    {
-      key                 = "Name"
-      value               = "${var.environment}-${var.name} Pipeline Container Host"
-      propagate_at_launch = true
-    },
-  ]
 }
 
 resource "aws_launch_configuration" "ecs_launch_config" {
@@ -52,11 +62,12 @@ data "template_file" "user_data" {
   }
 }
 
-data "template_file" "instance_profile" {
-  template = "${file("${path.module}/templates/instance-profile-policy.json")}"
+#data "template_file" "instance_profile" {
+#  template = "${file("${path.module}/templates/instance-profile-policy.json")}"
+#
+#  vars {
+#    app_log_group_arn       = "${var.cloudwatch_log_handle}"
+#    ecs_agent_log_group_arn = "${var.cloudwatch_log_handle}"
+#  }
+#}
 
-  vars {
-    app_log_group_arn       = "${var.cloudwatch_log_handle}"
-    ecs_agent_log_group_arn = "${var.cloudwatch_log_handle}"
-  }
-}
