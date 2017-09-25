@@ -100,5 +100,8 @@ module "jenkins" {
   target_group_id = "${module.pipeline_ecs.target_group_id[0]}" #Jenkins
 }
 
-#Drop an ec2 instance in here
-
+module "ecr_repos" {
+  source      = "modules/ecr_terraform_module"
+  environment = "${var.environment}"
+  registries  = ["pipeline/jenkins"]
+}

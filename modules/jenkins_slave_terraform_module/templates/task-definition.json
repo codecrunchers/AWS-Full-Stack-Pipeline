@@ -1,0 +1,41 @@
+[
+    {
+        "essential": true,
+        "image": "${image_url}",
+        "memoryReservation": ${memory},
+        "name": "${container_name}",
+        "portMappings": [
+            {
+                "containerPort": ${container_port},
+                "hostPort": ${host_port}
+            }
+        ],
+        "environment": [
+            {
+                "name":"JENKINS_URL",
+                "value":"${jenkins_url}"
+            },
+            {
+                "name":"JENKINS_TUNNEL",
+                "value":"${jenkins_tunnel}"
+            },
+            {
+                "name":"JENKINS_SECRT",
+                "value":"-secret 4620290824a1c3e4055bff953597d47a05f9e4f8212a44874ce581d5fd046be5"
+            },
+            {
+                "name":"JENKINS_AGENT_NAME",
+                "value":"${jenkins_agent_name}"
+            }
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}"
+            }
+        }
+    }
+]
+
+

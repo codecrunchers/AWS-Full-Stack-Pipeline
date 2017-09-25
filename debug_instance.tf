@@ -12,7 +12,7 @@ resource "aws_instance" "debug_box" {
 }
 
 resource "aws_security_group" "debug_box_gs" {
-  description = "Controls access to the application ALB"
+  description = "Controls access to the Debug Box within VPN"
   vpc_id      = "${module.vpc_pipeline.id}"
   name        = "${var.environment}-${var.name}-ecs-sg"
 
@@ -35,6 +35,10 @@ resource "aws_security_group" "debug_box_gs" {
   }
 
   tags {
-    Name = "Allow Specified CIDR Blocks to Access Alb"
+    Name = "Security for Debug Box, allow access from cidr_block"
   }
+}
+
+output "debug_box_private_ip" {
+  value = "${aws_instance.debug_box.private_ip}"
 }
