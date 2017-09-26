@@ -21,10 +21,10 @@ module "vpn_instance" {
   dns_zone              = "${var.dns_zone}"
 }
 
-resource "aws_s3_bucket" "statefiles_for_app" {
-  bucket = "statefiles-pipeline"
-  acl    = "private"
-}
+#resource "aws_s3_bucket" "statefiles_for_app" {
+#  bucket = "statefiles-dev-pipeline"
+#  acl    = "private"
+#}
 
 module "pipeline_ecs" {
   source             = "modules/ecs_terraform_module"

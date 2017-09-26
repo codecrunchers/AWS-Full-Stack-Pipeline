@@ -1,4 +1,4 @@
-environment = "dev"
+environment = "tmp"
 
 ecs_params = {
   min_instances     = 1
@@ -8,7 +8,7 @@ ecs_params = {
   instance_type     = "t2.small"
 }
 
-dns_zone = "paddle-planner.com"
+dns_zone = "p9e.io"
 
 name = "Pipeline"
 
