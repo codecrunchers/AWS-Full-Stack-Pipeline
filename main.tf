@@ -17,7 +17,7 @@ module "vpn_instance" {
   subnets               = "${module.vpc_pipeline.public_subnet_ids}"
   vpn_instance_details  = "${var.vpn_instance_details}"
   whitelist_cidr_blocks = ["37.228.251.43/32", "192.30.252.0/22", "185.199.108.0/22"] //Home,GitHUB*2
-  environment           = "${var.environment}"
+  environment           = "${var.environment}-tmp"
   dns_zone              = "${var.dns_zone}"
 }
 
