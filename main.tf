@@ -2,7 +2,7 @@ module "vpc_pipeline" {
   source                     = "modules/vpc_module"
   name                       = "Pipeline-VPC"
   region                     = "${var.region}"
-  key_name                   = "pipeline"
+  key_name                   = "${var.key_name}"
   cidr_block                 = "10.0.0.0/16"
   external_access_cidr_block = "0.0.0.0/0"
   private_subnet_cidr_blocks = "${var.private_subnet_cidr_blocks}"
@@ -39,7 +39,7 @@ module "pipeline_ecs" {
   environment   = "${var.environment}"
   dns_zone      = "${var.dns_zone}"
   cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"
-  ssh_key       = "pipeline"
+  ssh_key       = "${var.key_name}"
 
   whitelist_cidr_blocks = [
     "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",
@@ -50,38 +50,33 @@ module "pipeline_ecs" {
   high_port             = 9000
   vpc_id                = "${module.vpc_pipeline.id}"
   ecs_params            = "${var.ecs_params}"
-  cloudwatch_log_handle = "${module.cloudwatch_host_container.cw_handle}"
-  alb_target_groups     = ["${var.jenkins_pipeline_definition}"]
+  cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
+  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition)}"
 }
 
-module "cloudwatch_host_container" {
+module "cloudwatch_pipeline" {
   source      = "modules/cloudwatch_terraform_module"
   environment = "${var.environment}"
   name        = "${var.name}"
 
-  app = {
-    name = "ecs-pipeline-container"
-  }
-}
-
-module "cloudwatch_jenkins" {
-  source      = "modules/cloudwatch_terraform_module"
-  environment = "${var.environment}"
-  name        = "${var.name}"
-
-  app = {
-    name = "jenkins"
-  }
-}
-
-module "cloudwatch_jenkins_slaves" {
-  source      = "modules/cloudwatch_terraform_module"
-  environment = "${var.environment}"
-  name        = "${var.name}"
-
-  app = {
-    name = "jenkinsSlave"
-  }
+  groups = [
+    {
+      name              = "ecs-pipeline-container"
+      retention_in_days = 14
+    },
+    {
+      name              = "jenkinsSlave"
+      retention_in_days = 14
+    },
+    {
+      name              = "jenkins"
+      retention_in_days = 14
+    },
+    {
+      name              = "consul"
+      retention_in_days = 14
+    },
+  ]
 }
 
 module "pipeline_storage" {
@@ -107,6 +102,24 @@ module "jenkins_slaves" {
 
   region          = "${var.region}"
   target_group_id = ""
+}
+
+module "consul" {
+  source            = "modules/consul_terraform_module"
+  environment       = "${var.environment}"
+  name              = "${var.name}"
+  consul_definition = "${var.consul_definition}"
+  docker_image_tag  = "${var.consul_definition["docker_image_tag"]}"
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.name}/${var.environment}/consul"
+  }
+
+  region = "${var.region}"
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #Consul
 }
 
 module "jenkins" {

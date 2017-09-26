@@ -43,6 +43,14 @@ resource "aws_security_group" "ecs_instance_sg" {
     ]
   }
 
+  ingress {
+    protocol  = "tcp"
+    from_port = 22
+    to_port   = 22
+
+    cidr_blocks = "${var.private_subnets}"
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

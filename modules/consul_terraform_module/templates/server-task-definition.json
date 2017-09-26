@@ -1,0 +1,33 @@
+[
+    {
+        "essential": true,
+        "image": "${image_url}",
+        "memoryReservation": ${memory},
+        "name": "${container_name}",
+        "networkMode": "host",
+        "portMappings": [
+        {
+          "hostPort": 53,
+          "containerPort": 53,
+          "protocol": "udp"
+        },
+        {
+          "hostPort": 8500,
+          "containerPort": 8500,
+          "protocol": "tcp"
+        },
+        {
+          "hostPort": 8400,
+          "containerPort": 8400,
+          "protocol": "tcp"
+        }
+      ],
+        "command": [
+            "agent",
+            "-server",
+            "-ui"
+        ]
+    }
+]
+
+

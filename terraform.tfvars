@@ -16,7 +16,7 @@ project = "Pipeline"
 
 region = "eu-west-1"
 
-key_name = "pipeline"
+key_name = "pipeline-p9-v2"
 
 cidr_block = "10.0.0.0/16"
 
@@ -31,12 +31,23 @@ availability_zones = ["eu-west-1a", "eu-west-1b"]
 vpn_instance_details = {
   ami      = "ami-015fbb78"
   size     = "t2.micro"
-  key_name = "pipeline"
+  key_name = "pipeline-p9-v2"
+}
+
+consul_definition = {
+  docker_image_tag           = "consul"
+  name                       = "consul"
+  context                    = "consul"
+  host_port_to_expose        = "8500"   #ALB
+  container_port_to_expose   = "8500"   #ALB
+  instance_memory_allocation = "512"
+  instance_count             = "1"
 }
 
 jenkins_pipeline_definition = {
   docker_image_tag           = "jenkins/jenkins:lts"
   name                       = "jenkins"
+  context                    = "jenkins"
   host_port_to_expose        = "8080"
   container_port_to_expose   = "8080"
   instance_memory_allocation = "512"
@@ -46,6 +57,7 @@ jenkins_pipeline_definition = {
 jenkins_pipeline_slave_definition = {
   docker_image_tag           = "jenkinsci/jnlp-slave"
   name                       = "jenkins-slave"
+  context                    = "jenkins-slave"
   host_port_to_expose        = ""
   container_port_to_expose   = ""
   instance_memory_allocation = "128"

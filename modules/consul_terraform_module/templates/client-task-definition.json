@@ -1,0 +1,33 @@
+[
+    {
+        "essential": true,
+        "image": "${image_url}",
+        "memoryReservation": ${memory},
+        "name": "${container_name}",
+        "networkMode": "host",
+        "command": [
+            "agent",
+            "-server", 
+            "-bind=0.0.0.0",
+            "-bootstrap-expect=1",
+            "-datacenter=dc0",
+            "-retry-join-ec2-tag-key=aws:autoscaling:groupName",
+            "-retry-join-ec2-tag-value=ops-cluster"
+            "-dns-port=53",
+            "-recursor=8.8.8.8"
+        ],
+        "environment": [
+            {
+                "name": "CONSUL_BIND_INTERFACE",
+                "value": "eth0"
+            },
+            {
+                "name": "CONSUL_BIND_INTERFACE",
+                "value": "eth0"
+            }]
+        }
+
+
+]
+
+

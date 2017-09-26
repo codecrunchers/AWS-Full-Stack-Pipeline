@@ -3,7 +3,7 @@ resource "aws_instance" "debug_box" {
   instance_type               = "t2.micro"
   subnet_id                   = "${module.vpc_pipeline.private_subnet_ids[0]}"
   associate_public_ip_address = false
-  key_name                    = "pipeline"
+  key_name                    = "${var.key_name}"
   security_groups             = ["${aws_security_group.debug_box_gs.id}"]
 
   tags {

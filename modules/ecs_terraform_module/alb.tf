@@ -13,11 +13,11 @@ resource "aws_alb_target_group" "alb_target_groups" {
 
   health_check {
     interval            = 60
-    path                = "/${lookup(var.alb_target_groups[count.index],"name")}/"
+    path                = "/${lookup(var.alb_target_groups[count.index],"context")}/"
     timeout             = 20
-    healthy_threshold   = 2                                                        # Give them some breathing space
+    healthy_threshold   = 2                                                           # Give them some breathing space
     unhealthy_threshold = 10
-    matcher             = "200-499"                                                #debug
+    matcher             = "200-499"                                                   #debug
   }
 
   lifecycle {

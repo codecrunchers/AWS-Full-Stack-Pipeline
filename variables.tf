@@ -55,3 +55,7 @@ variable "jenkins_pipeline_slave_definition" {
 variable "jenkins_pipeline_definition" {
   type = "map"
 }
+
+variable "consul_definition" {
+  type = "map"
+}

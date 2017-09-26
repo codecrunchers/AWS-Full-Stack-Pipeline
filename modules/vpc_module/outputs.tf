@@ -1,5 +1,13 @@
 # Out
 
+output "consul_private_ip" {
+  value = "${aws_instance.consulinstance.private_ip}"
+}
+
+output "consul_public_ip" {
+  value = "${aws_instance.consulinstance.public_ip}"
+}
+
 output "public_subnet_cidr_blocks" {
   value = "${var.private_subnet_cidr_blocks}"
 }
