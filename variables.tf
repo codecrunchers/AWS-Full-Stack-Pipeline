@@ -48,6 +48,10 @@ variable "availability_zones" {
 
 variable "dns_zone" {}
 
+variable "jenkins_pipeline_slave_definition" {
+  type = "map"
+}
+
 variable "jenkins_pipeline_definition" {
   type = "map"
 }

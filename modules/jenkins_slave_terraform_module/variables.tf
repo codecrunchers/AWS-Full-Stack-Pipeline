@@ -2,7 +2,7 @@ variable "name" {}
 
 variable "environment" {}
 
-variable "pipeline_definition" {
+variable "slave_pipeline_definition" {
   type = "map"
 }
 

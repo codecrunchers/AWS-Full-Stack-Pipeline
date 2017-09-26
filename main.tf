@@ -74,6 +74,16 @@ module "cloudwatch_jenkins" {
   }
 }
 
+module "cloudwatch_jenkins_slaves" {
+  source      = "modules/cloudwatch_terraform_module"
+  environment = "${var.environment}"
+  name        = "${var.name}"
+
+  app = {
+    name = "jenkinsSlave"
+  }
+}
+
 module "pipeline_storage" {
   source             = "modules/filesystem_terraform_module"
   environment        = "${var.environment}"
@@ -82,12 +92,29 @@ module "pipeline_storage" {
   vpc_id             = "${module.vpc_pipeline.id}"
 }
 
+module "jenkins_slaves" {
+  source                    = "modules/jenkins_slave_terraform_module"
+  environment               = "${var.environment}"
+  name                      = "${var.name}"
+  docker_image_tag          = "${var.jenkins_pipeline_slave_definition["docker_image_tag"]}"
+  slave_pipeline_definition = "${var.jenkins_pipeline_slave_definition}"
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkinsSlave"
+  }
+
+  region          = "${var.region}"
+  target_group_id = ""
+}
+
 module "jenkins" {
   source              = "modules/jenkins_terraform_module"
   environment         = "${var.environment}"
   name                = "${var.name}"
   pipeline_definition = "${var.jenkins_pipeline_definition}"
-  docker_image_tag    = "jenkins/jenkins"
+  docker_image_tag    = "${var.jenkins_pipeline_definition["docker_image_tag"]}"
 
   ecs_details = {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"

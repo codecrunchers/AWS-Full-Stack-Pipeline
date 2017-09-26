@@ -41,8 +41,13 @@ jenkins_pipeline_definition = {
   container_port_to_expose   = "8080"
   instance_memory_allocation = "512"
   instance_count             = "1"
+}
 
-  env_vars = {
-    JENKINS_OPTS = "--prefix=/jenkins"
-  }
+jenkins_pipeline_slave_definition = {
+  docker_image_tag           = "jenkinsci/jnlp-slave"
+  name                       = "jenkins-slave"
+  host_port_to_expose        = ""
+  container_port_to_expose   = ""
+  instance_memory_allocation = "128"
+  instance_count             = "1"
 }
