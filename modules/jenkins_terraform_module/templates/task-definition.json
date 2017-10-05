@@ -8,13 +8,22 @@
 				{
 					"containerPort": ${container_port},
 					"hostPort": ${host_port}
+				},
+				{
+					"containerPort": 50000,
+					"hostPort": 50000
 				}
 			],
 			"environment": [
 				{
 					"name": "JENKINS_OPTS",
 					"value": "--prefix=/jenkins"
-				}
+				},
+                {
+	                "name":"GIT_REPO",
+                    "value":"git@github.com:codecrunchers/terraform_aws_jenkins_pipeline_ecs.git"
+                }
+
 			],
 			"logConfiguration": {
 				"logDriver": "awslogs",

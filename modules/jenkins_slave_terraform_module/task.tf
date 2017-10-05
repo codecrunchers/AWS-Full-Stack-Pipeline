@@ -14,5 +14,7 @@ data "template_file" "slave_task_definition_file" {
     container_port   = 1
     host_port        = "${lookup(var.slave_pipeline_definition, "host_port_to_expose")}"
     memory           = "${lookup(var.slave_pipeline_definition, "instance_memory_allocation")}"
+    consul_ip        = "${var.consul_private_ip}"
+    region           = "${var.region}"
   }
 }

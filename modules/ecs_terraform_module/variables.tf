@@ -1,3 +1,4 @@
+variable "consul_private_ip" {}
 variable "name" {}
 variable "environment" {}
 variable "cluster_name" {}

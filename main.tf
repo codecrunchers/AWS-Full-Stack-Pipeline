@@ -2,13 +2,15 @@ module "vpc_pipeline" {
   source                     = "modules/vpc_module"
   name                       = "Pipeline-VPC"
   region                     = "${var.region}"
-  key_name                   = "${var.key_name}"
+  key_name                   = "${aws_key_pair.deployer.key_name}"
   cidr_block                 = "10.0.0.0/16"
   external_access_cidr_block = "0.0.0.0/0"
   private_subnet_cidr_blocks = "${var.private_subnet_cidr_blocks}"
   public_subnet_cidr_blocks  = "${var.public_subnet_cidr_blocks}"
   availability_zones         = "${var.availability_zones}"
   project                    = "CDPipeline"
+  iam_ecs                    = "${module.pipeline_ecs.iam_ecs}"
+  DnsZoneName                = "${var.dns_zone}"
 }
 
 module "vpn_instance" {
@@ -16,8 +18,8 @@ module "vpn_instance" {
   vpc_id                = "${module.vpc_pipeline.id}"
   subnets               = "${module.vpc_pipeline.public_subnet_ids}"
   vpn_instance_details  = "${var.vpn_instance_details}"
-  whitelist_cidr_blocks = ["37.228.251.43/32", "192.30.252.0/22", "185.199.108.0/22"] //Home,GitHUB*2
-  environment           = "${var.environment}-tmp"
+  whitelist_cidr_blocks = "${var.external_access_cidr_block}"
+  environment           = "${var.environment}"
   dns_zone              = "${var.dns_zone}"
 }
 
@@ -39,11 +41,12 @@ module "pipeline_ecs" {
   environment   = "${var.environment}"
   dns_zone      = "${var.dns_zone}"
   cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"
-  ssh_key       = "${var.key_name}"
+  ssh_key       = "${aws_key_pair.deployer.key_name}"
 
   whitelist_cidr_blocks = [
     "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",
     "37.228.251.43/32",
+    "83.70.128.30/32",
   ]
 
   low_port              = 8080
@@ -52,6 +55,7 @@ module "pipeline_ecs" {
   ecs_params            = "${var.ecs_params}"
   cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
   alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition)}"
+  consul_private_ip     = "${module.vpc_pipeline.consul_private_ip}"
 }
 
 module "cloudwatch_pipeline" {
@@ -76,6 +80,10 @@ module "cloudwatch_pipeline" {
       name              = "consul"
       retention_in_days = 14
     },
+    {
+      name              = "registrator"
+      retention_in_days = 14
+    },
   ]
 }
 
@@ -87,12 +95,32 @@ module "pipeline_storage" {
   vpc_id             = "${module.vpc_pipeline.id}"
 }
 
+module "registrator" {
+  source                 = "modules/registrator_terraform_module"
+  environment            = "${var.environment}"
+  name                   = "${var.name}"
+  docker_image_tag       = "${var.registrator_definition["docker_image_tag"]}"
+  registrator_definition = "${var.registrator_definition}"
+  consul_private_ip      = "${module.vpc_pipeline.consul_private_ip}"
+
+  ecs_details = {
+    desired_count             = 0
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.name}/${var.environment}/registrator"
+  }
+
+  region          = "${var.region}"
+  target_group_id = ""
+}
+
 module "jenkins_slaves" {
   source                    = "modules/jenkins_slave_terraform_module"
   environment               = "${var.environment}"
   name                      = "${var.name}"
   docker_image_tag          = "${var.jenkins_pipeline_slave_definition["docker_image_tag"]}"
   slave_pipeline_definition = "${var.jenkins_pipeline_slave_definition}"
+  consul_private_ip         = "${module.vpc_pipeline.consul_private_ip}"
 
   ecs_details = {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"
@@ -104,12 +132,14 @@ module "jenkins_slaves" {
   target_group_id = ""
 }
 
+#Consul Agent for Containers
 module "consul" {
   source            = "modules/consul_terraform_module"
   environment       = "${var.environment}"
   name              = "${var.name}"
   consul_definition = "${var.consul_definition}"
   docker_image_tag  = "${var.consul_definition["docker_image_tag"]}"
+  consul_private_ip = "${module.vpc_pipeline.consul_private_ip}"
 
   ecs_details = {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"
@@ -143,5 +173,9 @@ module "jenkins" {
 module "ecr_repos" {
   source      = "modules/ecr_terraform_module"
   environment = "${var.environment}"
-  registries  = ["pipeline/jenkins"]
+  registries  = ["pipeline/jenkins", "pipeline/jenkinsslave", "pipeline/consul", "pipeline/registrator"]
+}
+
+resource "aws_key_pair" "deployer" {
+  public_key = ""
 }

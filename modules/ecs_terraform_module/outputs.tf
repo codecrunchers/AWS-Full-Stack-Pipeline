@@ -1,3 +1,7 @@
+output "iam_ecs" {
+  value = "${aws_iam_instance_profile.ecs.id}"
+}
+
 output "cluster_name" {
   value = "${aws_ecs_cluster.ecs.name}"
 }

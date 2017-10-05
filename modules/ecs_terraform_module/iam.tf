@@ -43,6 +43,6 @@ resource "aws_iam_role_policy" "ecs_kms_decrypt_policy" {
  * IAM profile to be used in auto-scaling launch configuration.
  */
 resource "aws_iam_instance_profile" "ecs" {
-  path  = "/"
-  roles = ["${aws_iam_role.ecs_role.name}"]
+  path = "/"
+  role = "${aws_iam_role.ecs_role.name}"
 }

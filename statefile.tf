@@ -5,8 +5,8 @@
 terraform {
   backend "s3" {
     region  = "eu-west-1"
-    bucket  = "statefiles-tmp-pipeline"
-    key     = "tf_statefiles/tmp_pipeline/prod.tfstate"
+    bucket  = "alan.planet9.statefiles-pipeline-v2"
+    key     = "tf_statefiles/dev.tfstate"
     acl     = "private"
     encrypt = true
   }

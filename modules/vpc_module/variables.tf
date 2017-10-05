@@ -1,6 +1,7 @@
+variable "iam_ecs" {}
+
 variable "DnsZoneName" {
-  type    = "string"
-  default = "pipeline.internal"
+  type = "string"
 }
 
 variable "name" {
@@ -41,4 +42,13 @@ variable "private_subnet_cidr_blocks" {
 
 variable "availability_zones" {
   type = "list"
+}
+
+variable "ecs_amis" {
+  type = "map"
+
+  default = {
+    eu-west-1 = "ami-809f84e6"
+    eu-west-2 = "ami-ff15039b"
+  }
 }

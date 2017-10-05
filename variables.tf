@@ -29,7 +29,7 @@ variable "cidr_block" {
 }
 
 variable "external_access_cidr_block" {
-  default = "0.0.0.0/0"
+  type = "list"
 }
 
 variable "public_subnet_cidr_blocks" {
@@ -47,6 +47,10 @@ variable "availability_zones" {
 }
 
 variable "dns_zone" {}
+
+variable "registrator_definition" {
+  type = "map"
+}
 
 variable "jenkins_pipeline_slave_definition" {
   type = "map"

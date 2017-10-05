@@ -5,11 +5,17 @@
         "memoryReservation": ${memory},
         "name": "${container_name}",
         "command": [
-            "-join",
-            "${consul_ip}",
-            "-dc",
-            "${region}"
+            "-ip",
+            "$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)",
+            "consul://${consul_ip}:8500"
         ],
+        "mountPoints": [
+            {
+                "sourceVolume": "docker_sock",
+                "containerPath": "/tmp/docker.sock"
+            }
+        ],
+
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
@@ -17,8 +23,9 @@
                 "awslogs-region": "${log_group_region}"
             }
         }
-    }
-]
 
+    }
+
+]
 
 

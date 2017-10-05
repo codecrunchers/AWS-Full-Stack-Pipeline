@@ -1,2 +1,6 @@
-.terraform
+key.tf
+.terraform/modules/
 terraform.tfstate.backup
+.*.backup
+.*\.backup
+.terraform/

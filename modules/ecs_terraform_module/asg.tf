@@ -59,6 +59,7 @@ data "template_file" "user_data" {
     efs_url      = "${var.efs_mount_dns}"
     p9_env       = "${var.environment}"
     cluster_name = "${var.cluster_name}"
+    consul_ip    = "${var.consul_private_ip}"
   }
 }
 

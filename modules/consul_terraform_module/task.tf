@@ -4,7 +4,7 @@ resource "aws_ecs_task_definition" "consul" {
 }
 
 data "template_file" "consul_definition_file" {
-  template = "${file("${path.module}/templates/server-task-definition.json")}"
+  template = "${file("${path.module}/templates/client-task-definition.json")}"
 
   vars {
     image_url        = "${var.docker_image_tag}"
@@ -14,5 +14,7 @@ data "template_file" "consul_definition_file" {
     container_port   = "${lookup(var.consul_definition, "container_port_to_expose")}"
     host_port        = "${lookup(var.consul_definition, "host_port_to_expose")}"
     memory           = "${lookup(var.consul_definition, "instance_memory_allocation")}"
+    consul_ip        = "${var.consul_private_ip}"
+    region           = "${var.region}"
   }
 }

@@ -4,7 +4,7 @@ variable "name" {}
 
 variable "environment" {}
 
-variable "consul_definition" {
+variable "registrator_definition" {
   type = "map"
 }
 

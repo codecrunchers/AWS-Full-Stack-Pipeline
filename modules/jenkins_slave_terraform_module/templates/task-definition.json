@@ -4,10 +4,11 @@
         "image": "${image_url}",
         "memoryReservation": ${memory},
         "name": "${container_name}",
+        "dnsServers": ["${consul_ip}"],
         "environment": [
             {
                 "name":"JENKINS_URL",
-                "value":"http://172.17.0.2:8080/jenkins"
+                "value":"http://jenkins-8080.service.${region}.consul:8080/jenkins"
             },
             {
                 "name":"JENKINS_SECRET",
@@ -17,8 +18,17 @@
                 "name":"JENKINS_AGENT_NAME",
                 "value":"ecs_slave"
             }
-        ]
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}"
+            }
+        }     
+
     }
 ]
+
 
 

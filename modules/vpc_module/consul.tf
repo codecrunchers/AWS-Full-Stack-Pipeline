@@ -61,12 +61,38 @@ resource "aws_security_group" "consul" {
     protocol    = "tcp"
     cidr_blocks = ["${var.cidr_block}"]
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+data "aws_route53_zone" "primary" {
+  name   = "${var.DnsZoneName}"
+  vpc_id = "${aws_vpc.default.id}"
+}
+
+resource "aws_route53_record" "consul" {
+  zone_id = "${data.aws_route53_zone.primary.zone_id}"
+  name    = "consul.${var.DnsZoneName}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.consulinstance.private_ip}"]
+}
+
+data "aws_region" "region" {
+  current = true
 }
 
 resource "aws_instance" "consulinstance" {
-  ami           = "ami-785db401"
-  instance_type = "t2.micro"
+  ami           = "${lookup(var.ecs_amis, data.aws_region.region.name)}"
+  instance_type = "t2.small"
   key_name      = "${var.key_name}"
+
+  iam_instance_profile = "${var.iam_ecs}"
 
   vpc_security_group_ids = [
     "${aws_security_group.consul.id}",
@@ -87,5 +113,10 @@ resource "aws_instance" "consulinstance" {
 }
 
 data "template_file" "user_data" {
-  template = "${file("${path.module}/templates/consul-user-data-bash.instance")}"
+  template = "${file("${path.module}/templates/consul-bash-script.sh")}"
+
+  vars {
+    #  vpc_dns_host = "${aws_instance.consulinstance.public_dns}" //set by user-init
+    vpc_region = "${data.aws_region.region.name}"
+  }
 }
