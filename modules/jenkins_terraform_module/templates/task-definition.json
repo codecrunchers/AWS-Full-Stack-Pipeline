@@ -4,6 +4,7 @@
 			"image": "${image_url}",
 			"memoryReservation": ${memory},
 			"name": "${container_name}",
+            "command":["--prefix=/jenkins"]
 			"portMappings": [
 				{
 					"containerPort": ${container_port},
@@ -17,7 +18,7 @@
 			"environment": [
 				{
 					"name": "JENKINS_OPTS",
-					"value": "--prefix=/jenkins"
+					"value": ""
 				},
                 {
 	                "name":"GIT_REPO",
