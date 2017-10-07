@@ -10,7 +10,7 @@ module "vpc_pipeline" {
   availability_zones         = "${var.availability_zones}"
   project                    = "CDPipeline"
   iam_ecs                    = "${module.pipeline_ecs.iam_ecs}"
-  DnsZoneName                = "${var.dns_zone}"
+  dns_zone_name              = "${var.dns_zone}"
 }
 
 module "vpn_instance" {

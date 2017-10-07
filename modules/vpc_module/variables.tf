@@ -1,6 +1,6 @@
 variable "iam_ecs" {}
 
-variable "DnsZoneName" {
+variable "dns_zone_name" {
   type = "string"
 }
 

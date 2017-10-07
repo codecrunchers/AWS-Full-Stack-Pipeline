@@ -71,13 +71,13 @@ resource "aws_security_group" "consul" {
 }
 
 data "aws_route53_zone" "primary" {
-  name   = "${var.DnsZoneName}"
+  name   = "${var.dns_zone_name}"
   vpc_id = "${aws_vpc.default.id}"
 }
 
 resource "aws_route53_record" "consul" {
   zone_id = "${data.aws_route53_zone.primary.zone_id}"
-  name    = "consul.${var.DnsZoneName}"
+  name    = "consul.${var.dns_zone_name}"
   type    = "A"
   ttl     = "300"
   records = ["${aws_instance.consulinstance.private_ip}"]

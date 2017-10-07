@@ -1,13 +1,5 @@
 environment = "tmp"
 
-ecs_params = {
-  min_instances     = 1
-  max_instances     = 2
-  desired_instances = 1
-  ecs_name          = "pipeline"
-  instance_type     = "t2.small"
-}
-
 dns_zone = "cd-pipeline.io"
 
 name = "Pipeline"
@@ -72,4 +64,12 @@ jenkins_pipeline_slave_definition = {
   container_port_to_expose   = ""
   instance_memory_allocation = "128"
   instance_count             = "1"
+}
+
+ecs_params = {
+  min_instances     = 1
+  max_instances     = 2
+  desired_instances = 1
+  ecs_name          = "pipeline"
+  instance_type     = "t2.small"
 }

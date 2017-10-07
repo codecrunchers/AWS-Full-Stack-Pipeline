@@ -1,0 +1,183 @@
+{
+    "version": 3,
+    "terraform_version": "0.9.11",
+    "serial": 82,
+    "lineage": "d196c63f-538a-48d6-b169-91ab40765f3c",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "cloudwatch_pipeline"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "consul"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "ecr_repos"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "jenkins"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "jenkins_slaves"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "pipeline_container_reg"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "pipeline_ecs"
+            ],
+            "outputs": {
+                "target_group_id": {
+                    "sensitive": false,
+                    "type": "list",
+                    "value": [
+                        "arn:aws:elasticloadbalancing:eu-west-1:492333042402:targetgroup/tmp-Pipeline-ECS-Cluster-jenkins/9514e3823b3bcd7c",
+                        "arn:aws:elasticloadbalancing:eu-west-1:492333042402:targetgroup/tmp-Pipeline-ECS-Cluster-consul/303b0abe40adb6e5"
+                    ]
+                }
+            },
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "pipeline_storage"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "registrator"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "vpc_pipeline"
+            ],
+            "outputs": {
+                "cidr_block": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "10.0.0.0/16"
+                },
+                "id": {
+                    "sensitive": false,
+                    "type": "string",
+                    "value": "vpc-3b40395c"
+                },
+                "private_subnet_cidr_blocks": {
+                    "sensitive": false,
+                    "type": "list",
+                    "value": [
+                        "10.0.1.0/24",
+                        "10.0.3.0/24"
+                    ]
+                },
+                "public_subnet_cidr_blocks": {
+                    "sensitive": false,
+                    "type": "list",
+                    "value": [
+                        "10.0.1.0/24",
+                        "10.0.3.0/24"
+                    ]
+                }
+            },
+            "resources": {
+                "aws_vpc.default": {
+                    "type": "aws_vpc",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "vpc-3b40395c",
+                        "attributes": {
+                            "assign_generated_ipv6_cidr_block": "false",
+                            "cidr_block": "10.0.0.0/16",
+                            "default_network_acl_id": "acl-08283a6f",
+                            "default_route_table_id": "rtb-311db057",
+                            "default_security_group_id": "sg-24c8f05c",
+                            "dhcp_options_id": "dopt-587f123d",
+                            "enable_classiclink": "false",
+                            "enable_dns_hostnames": "true",
+                            "enable_dns_support": "true",
+                            "id": "vpc-3b40395c",
+                            "instance_tenancy": "default",
+                            "main_route_table_id": "rtb-311db057",
+                            "tags.%": "3",
+                            "tags.Environment": "Unknown",
+                            "tags.Name": "Pipeline-VPC",
+                            "tags.Project": "CDPipeline"
+                        },
+                        "meta": {
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": ""
+                }
+            },
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "vpn_instance"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        }
+    ]
+}
