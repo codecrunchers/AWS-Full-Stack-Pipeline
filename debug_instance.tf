@@ -7,7 +7,7 @@ resource "aws_instance" "debug_box" {
   vpc_security_group_ids      = ["${aws_security_group.debug_box_gs.id}"]
 
   tags {
-    Name = "Debug Box in Private Network"
+    Name = "Debug Box in Private Network (${var.environment}-${var.name})"
   }
 }
 

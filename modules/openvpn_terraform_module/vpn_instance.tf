@@ -1,20 +1,20 @@
 resource "aws_instance" "vpn" {
-  vpc_security_group_ids = [
-    "${aws_security_group.vpn.id}",
-  ]
+  #  vpc_security_group_ids = [  #    "${aws_security_group.vpn.id}",  #  ]
 
   #  subnet_id = "${var.subnets[0]}"
 
   ami           = "${var.vpn_instance_details["ami"]}"
   instance_type = "${var.vpn_instance_details["size"]}"
   key_name      = "${var.vpn_instance_details["key_name"]}"
+
   lifecycle {
     #  prevent_destroy = true
   }
+
   tags {
-    "Name"       = "vpn-${var.environment}"
+    "Name"       = "vpn"
     "stack_name" = "vpn-${var.environment}"
-    "stack_id"   = "TODO"
+    "stack_id"   = "0bc300f5-cce5-4224-b63f-446734f2e0a9"
   }
 }
 

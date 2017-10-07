@@ -1,3 +1,7 @@
+output "vpn_ip" {
+  value = "${module.vpn_instance.vpn_ip}"
+}
+
 output "alb_endpoint" {
   value = "${module.pipeline_ecs.alb_endpoint}"
 }

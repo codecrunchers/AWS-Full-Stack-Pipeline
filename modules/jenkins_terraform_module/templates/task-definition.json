@@ -4,7 +4,7 @@
 			"image": "${image_url}",
 			"memoryReservation": ${memory},
 			"name": "${container_name}",
-            "command":["--prefix=/jenkins"]
+            "command":["--prefix=/jenkins"],
 			"portMappings": [
 				{
 					"containerPort": ${container_port},
@@ -18,7 +18,7 @@
 			"environment": [
 				{
 					"name": "JENKINS_OPTS",
-					"value": ""
+					"value": "-Dnone=none"
 				},
                 {
 	                "name":"GIT_REPO",
@@ -26,7 +26,15 @@
                 }
 
 			],
-			"logConfiguration": {
+            "volumes":
+            [
+                {
+                    "name": "jenkins_home",
+                    "host": {}
+                   
+                }
+            ],
+            "logConfiguration": {
 				"logDriver": "awslogs",
 				"options": {
 					"awslogs-group": "${log_group_name}",
