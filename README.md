@@ -3,7 +3,7 @@
 This is a  `fully managed` ECS/Container Driven build Continuous Delivery Platform.  
 
 # Features
-* Scalable Jenkins Build Masters.*
+* Scalable Jenkins Build Masters.
 * Sonar for source code analysis
 * Nexus Artifactory
 * Consul for internal service discovery
