@@ -26,12 +26,10 @@
                 }
 
 			],
-            "volumes":
-            [
+            "mountPoints": [
                 {
-                    "name": "jenkins_home",
-                    "host": {}
-                   
+                    "sourceVolume": "jenkins_home",
+                    "containerPath": "/var/jenkins_home"
                 }
             ],
             "logConfiguration": {

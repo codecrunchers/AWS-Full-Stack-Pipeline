@@ -33,7 +33,7 @@ consul_definition = {
   host_port_to_expose        = "8500"                                                             #ALB
   container_port_to_expose   = "8500"                                                             #ALB
   instance_memory_allocation = "512"
-  instance_count             = "1"
+  instance_count             = "0"
 }
 
 registrator_definition = {
@@ -43,7 +43,7 @@ registrator_definition = {
   host_port_to_expose        = ""                                                                      #Don't
   container_port_to_expose   = ""
   instance_memory_allocation = "512"
-  instance_count             = "1"
+  instance_count             = "0"
 }
 
 jenkins_pipeline_definition = {
@@ -63,13 +63,13 @@ jenkins_pipeline_slave_definition = {
   host_port_to_expose        = ""
   container_port_to_expose   = ""
   instance_memory_allocation = "128"
-  instance_count             = "1"
+  instance_count             = "0"
 }
 
 ecs_params = {
   min_instances     = 1
-  max_instances     = 2
+  max_instances     = 3
   desired_instances = 1
   ecs_name          = "pipeline"
-  instance_type     = "t2.small"
+  instance_type     = "t2.medium"
 }

@@ -39,6 +39,13 @@ resource "aws_iam_role_policy" "ecs_kms_decrypt_policy" {
   role   = "${aws_iam_role.ecs_role.id}"
 }
 
+/* terraform base policy */
+resource "aws_iam_role_policy" "terraform_base_policy" {
+  name   = "${var.cluster_name}-terraform-base-policy"
+  policy = "${file("${path.module}/policies/terraform-ec2-instance-policy.json")}"
+  role   = "${aws_iam_role.ecs_role.id}"
+}
+
 /**
  * IAM profile to be used in auto-scaling launch configuration.
  */

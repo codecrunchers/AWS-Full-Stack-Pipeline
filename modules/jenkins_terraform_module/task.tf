@@ -1,6 +1,11 @@
 resource "aws_ecs_task_definition" "pipeline" {
   family                = "${format("%s_%s_family", var.environment,lookup(var.pipeline_definition,"name"))}"
   container_definitions = "${data.template_file.task_definition_file.rendered}"
+
+  volume {
+    name      = "jenkins_home"
+    host_path = "/efs/jenkins_home/"
+  }
 }
 
 data "template_file" "task_definition_file" {
