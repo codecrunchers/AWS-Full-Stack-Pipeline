@@ -20,5 +20,9 @@ data "template_file" "task_definition_file" {
     container_port   = "${lookup(var.pipeline_definition, "container_port_to_expose")}"
     host_port        = "${lookup(var.pipeline_definition, "host_port_to_expose")}"
     memory           = "${lookup(var.pipeline_definition, "instance_memory_allocation")}"
+    ecs_cluster      = "${lookup(var.ecs_details, "ecs_cluster")}"
+    jenkins_ip       = "${lookup(var.ecs_details, "jenkins_ip")}"
+    aws_region       = "${var.region}"
+    aws_account_id   = "${lookup(var.ecs_details, "aws_account_id")}"
   }
 }

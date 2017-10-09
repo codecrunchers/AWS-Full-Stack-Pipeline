@@ -109,24 +109,6 @@ module "registrator" {
   target_group_id = ""
 }
 
-module "jenkins_slaves" {
-  source                    = "modules/jenkins_slave_terraform_module"
-  environment               = "${var.environment}"
-  name                      = "${var.name}"
-  docker_image_tag          = "${var.jenkins_pipeline_slave_definition["docker_image_tag"]}"
-  slave_pipeline_definition = "${var.jenkins_pipeline_slave_definition}"
-  consul_private_ip         = "${module.vpc_pipeline.consul_private_ip}"
-
-  ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkinsSlave"
-  }
-
-  region          = "${var.region}"
-  target_group_id = ""
-}
-
 #Consul Agent for Containers
 module "consul" {
   source            = "modules/consul_terraform_module"
@@ -158,6 +140,9 @@ module "jenkins" {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkins"
+    ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
+    jenkins_ip                = "http://10.0.1.113:8080/jenkins"
+    aws_account_id            = "${data.aws_caller_identity.current.account_id}"
   }
 
   region = "${var.region}"
