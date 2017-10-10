@@ -7,7 +7,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 
 * Secure Public / Private  VPC setup with NAT & IGW
 * NAT between public and private subnets
-* Service Discovery via a consul cluster backed by a Private AWS Hosted Zone (no more ENV concerns, each VPC has it's own DNS, [](db.mydomain.io) is correct in every env/VPC -  developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
+* Service Discovery via a consul cluster backed by a Private AWS Hosted Zone (no more ENV concerns, each VPC has it's own DNS, [db.mydomain.io] is correct in every env/VPC -  developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
 * An Internet Gateway  (IGW) for handling all traffic.
 * An ECS backed managed cluster of Jenkins slaves with a governing master.
 * Scalable Node/Javascript build slaves, lifecycle managed by ECS & Jenkins.
