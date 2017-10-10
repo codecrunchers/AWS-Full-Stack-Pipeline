@@ -21,8 +21,8 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 * Cloudwtach Logging for most features
 
 ## AWS Architecture
-Rough Idea with Second Prod VP
-![Image of Setup](docs/imgs/Pipeline_Overview.png)
+Rough Idea with Second Prod VP:
+![Image of Setup](file://docs/imgs/Pipeline_Overview.png)
 
 
 ## Initial Setup
