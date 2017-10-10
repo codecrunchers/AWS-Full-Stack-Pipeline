@@ -7,7 +7,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 
 * Secure Public / Private  VPC setup with NAT & IGW
 * NAT between public and private subnets
-* Service Discovery via a consul cluster backed by a Private AWS Hosted Zone (no more ENV concerns, each VPC has it's own DNS, db.p9.io is correct in every env/VPC -  developers don't ever worry about config such as + "_${ENV}" )
+* Service Discovery via a consul cluster backed by a Private AWS Hosted Zone (no more ENV concerns, each VPC has it's own DNS, db.p9.io is correct in every env/VPC -  developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
 * An Internet Gateway  (IGW) for handling all traffic.
 * An ECS backed managed cluster of Jenkins slaves with a governing master.
 * Scalable Node/Javascript build slaves, lifecycle managed by ECS & Jenkins.
@@ -50,14 +50,17 @@ terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOU
 ```
 
 ## Bootstrapping
+
 The docker images
 
 ## Jenkins
 TODO: Set up Keys, and S3 Bucket
 
 ## Sonar
+You will need to manually configure Sonar for now.  Jenkins has 1 Sonar server configured, https://record.domain.tld/sonar/ (i.e. your ALB)
 
 ## Nexus
+Nexius is deployed, but likewise not configured
 
 ## VPN
 * [Docs(https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-ec2-appliance-ami-quick-start-guide/)
@@ -69,7 +72,8 @@ From there, you can access the Debug box, this has access to the entire VPC.
 
 ## AWS Commands for Manual Steps
 ### <a name="dynamodb"></a> DynamoDB
-```aws dynamodb create-table \
+```bash
+aws dynamodb create-table \
     --table-name <statefile.tf.dyanodb.name> \
     --attribute-definitions AttributeName=LockID,AttributeType=S \
     --key-schema AttributeName=LockID,KeyType=HASH \
@@ -77,7 +81,7 @@ From there, you can access the Debug box, this has access to the entire VPC.
 ```
 
 ### <a name="s3"></a> S3
-`aws s3 mb s3://<bucket_name_from_statefile.tf>` (Check for Versioning?)
+`aws s3 mb s3://<bucket_name_from_statefile.tf>` (Manually enable & then check for Versioning?) `aws s3api get-bucket-versioning  --bucket <bucket_name_from_statefile.tf>`
 
 ### <a name="keypair"></a> Keypair
 ```bash
@@ -89,7 +93,11 @@ chmod 400 pipeline-ecs.pem
 
 ## TODO
 * If New docker image is uploaded for Jenkins, the instance will use the the  files left on the EFS by the original Task invocatio, i.e. it won't update as you would expect as  the conifg is already in place. The disk needs to be wiped
+* Finalise consul and DNS
 * SSL
 * Output all DNS entries
 * Jobs for VPC Building
 * VPC Peering module
+* Configure Sonar
+* Configure Nexus
+
