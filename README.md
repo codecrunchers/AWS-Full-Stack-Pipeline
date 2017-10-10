@@ -56,8 +56,10 @@ terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOU
 ```
 
 ### Plan and Apply
-`terraform plan`
-`terraform apply`
+```bash
+terraform plan
+terraform apply
+```
 
 ### Services
 The ALB Endpoint will appear in the output.
