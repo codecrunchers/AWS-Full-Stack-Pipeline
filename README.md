@@ -20,6 +20,10 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 * A VPN
 * Cloudwtach Logging for most features
 
+## AWS Architecture
+Rough Idea with Second Prod VP
+![Image of Setup](docs/imgs/Pipeline_Overview.png)
+
 
 ## Initial Setup
 Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.11 so no workspaces for now.
