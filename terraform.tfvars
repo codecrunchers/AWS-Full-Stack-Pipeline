@@ -36,16 +36,6 @@ consul_definition = {
   instance_count             = "0"
 }
 
-registrator_definition = {
-  docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/registrator"
-  name                       = "registrator"
-  context                    = "registrator"
-  host_port_to_expose        = ""                                                                      #Don't
-  container_port_to_expose   = ""
-  instance_memory_allocation = "512"
-  instance_count             = "0"
-}
-
 jenkins_pipeline_definition = {
   docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/jenkins"
   name                       = "jenkins"
@@ -54,16 +44,6 @@ jenkins_pipeline_definition = {
   container_port_to_expose   = "8080"
   instance_memory_allocation = "512"
   instance_count             = "1"
-}
-
-jenkins_pipeline_slave_definition = {
-  docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/jenkinsslave"
-  name                       = "jenkins-slave"
-  context                    = "jenkins-slave"
-  host_port_to_expose        = ""
-  container_port_to_expose   = ""
-  instance_memory_allocation = "128"
-  instance_count             = "0"
 }
 
 ecs_params = {

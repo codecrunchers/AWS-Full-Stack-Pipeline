@@ -1,6 +1,6 @@
 module "vpc_pipeline" {
   source                     = "modules/vpc_module"
-  name                       = "Pipeline-VPC"
+  name                       = "Pipeline-VPC"                      #TODO Var
   region                     = "${var.region}"
   key_name                   = "${aws_key_pair.deployer.key_name}"
   cidr_block                 = "10.0.0.0/16"
@@ -8,7 +8,7 @@ module "vpc_pipeline" {
   private_subnet_cidr_blocks = "${var.private_subnet_cidr_blocks}"
   public_subnet_cidr_blocks  = "${var.public_subnet_cidr_blocks}"
   availability_zones         = "${var.availability_zones}"
-  project                    = "CDPipeline"
+  project                    = "CDPipeline"                        #TODO Didn't use consistently along with name
   iam_ecs                    = "${module.pipeline_ecs.iam_ecs}"
   dns_zone_name              = "${var.dns_zone}"
 }
@@ -35,16 +35,16 @@ module "pipeline_ecs" {
   efs_mount_dns = "${module.pipeline_storage.efs_mount_dns}"
   environment   = "${var.environment}"
   dns_zone      = "${var.dns_zone}"
-  cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"
+  cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"  #TODO: mmm mmm
   ssh_key       = "${aws_key_pair.deployer.key_name}"
 
   whitelist_cidr_blocks = [
     "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",
     "37.228.251.43/32",
     "83.70.128.30/32",
-  ]
+  ] #TODO Vars
 
-  low_port              = 8080
+  low_port              = 8080                                                             #TODO mmmm
   high_port             = 9000
   vpc_id                = "${module.vpc_pipeline.id}"
   ecs_params            = "${var.ecs_params}"
@@ -75,10 +75,6 @@ module "cloudwatch_pipeline" {
       name              = "consul"
       retention_in_days = 14
     },
-    {
-      name              = "registrator"
-      retention_in_days = 14
-    },
   ]
 }
 
@@ -88,25 +84,6 @@ module "pipeline_storage" {
   name               = "${var.name}"
   private_subnet_ids = "${module.vpc_pipeline.private_subnet_ids}"
   vpc_id             = "${module.vpc_pipeline.id}"
-}
-
-module "registrator" {
-  source                 = "modules/registrator_terraform_module"
-  environment            = "${var.environment}"
-  name                   = "${var.name}"
-  docker_image_tag       = "${var.registrator_definition["docker_image_tag"]}"
-  registrator_definition = "${var.registrator_definition}"
-  consul_private_ip      = "${module.vpc_pipeline.consul_private_ip}"
-
-  ecs_details = {
-    desired_count             = 0
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.name}/${var.environment}/registrator"
-  }
-
-  region          = "${var.region}"
-  target_group_id = ""
 }
 
 #Consul Agent for Containers
@@ -153,7 +130,7 @@ module "jenkins" {
 module "ecr_repos" {
   source      = "modules/ecr_terraform_module"
   environment = "${var.environment}"
-  registries  = ["pipeline/jenkins", "pipeline/jenkinsslave", "pipeline/consul", "pipeline/registrator"]
+  registries  = ["pipeline/jenkins", "pipeline/jenkinsslave", "pipeline/consul"]
 }
 
 resource "aws_key_pair" "deployer" {

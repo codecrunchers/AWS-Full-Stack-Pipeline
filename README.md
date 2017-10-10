@@ -1,7 +1,7 @@
-# Enterprise Development and Deployment 
+# Enterprise Development and Deployment
 ## A Docker Backed AutoScaling ECS Managed Amazon Pipeline
 
-This is a *fully managed* ECS/Container Driver Continuous Delivery Platform for building, testing and Production deployment
+This is a *fully managed* ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment
 
 This is a working, but basic enterprise deployment platform for AWS - with a central theme of deploying via a Managed Jenkins ECS cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get
 
