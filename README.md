@@ -29,13 +29,15 @@ Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.
 2. [Create your `DynamoDB` instance](#dynamo), again matching the names in `statefile.tf` - same as Step 1
 3. [Create a keypair](#keypair), matching the name to the value of `key_name` in `terraform.tfstate` save the .pem file as shown below.
 
+## Jenkins GitHub Credentials
+If you want your pirvate keys available, you need to load them into an S3 bucker #TODO: Set up Keys, and S3 Bucket
+
+
 ## Initialising state and deploying via Terraforming
 Install terraform, currently 0.9.11 (working on migration)
 
 ### S3/Terraform Backend
 
-## Jenkins GitHub Credentials 
-If you want your pirvate keys available, you need to load them into an S3 bucker #TODO: Set up Keys, and S3 Bucket
 
 ```bash
 git clone git@github.com:Plnt9/aws-pipeline-v2.git
