@@ -10,7 +10,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 * An Internet Gateway  (IGW) for handling all traffic.
 * An ECS backed managed cluster of Jenkins slaves with a governing master.
 * Scalable Node/Javascript build slaves, lifecycle managed by ECS & Jenkins.
-* A Jenkins 2.0 Master extended from [jenkins/jenkins] (https://hub.docker.com/r/jenkins/jenkins/)  customised to run a build on first boot.
+* A Jenkins 2.0 Master extended from [jenkins/jenkins](https://hub.docker.com/r/jenkins/jenkins/)  customised to run a build on first boot.
 * Jenkins Jobs to Create Deployable Development Environments such as Prod/QA/Staging *
 * Sonar for source code analysis
 * Nexus Artifactory
@@ -22,7 +22,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.11 so no workspaces for now.
 
 ## Manual CLI Steps (or do the same  via Web Console)
-1. [ Create your `S3` bucket for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf`] (#state)
+1. [ Create your `S3` bucket for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf`](#state)
 2. Create your `DynamoDB` instance , again matching the names in `statefile.tf` - same as Step 1
 3. Create a keypair, matching the name to the value of `key_name` in `terraform.tfstate` save the .pem file as shown below.
 
