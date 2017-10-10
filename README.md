@@ -33,6 +33,10 @@ Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.
 Install terraform, currently 0.9.11 (working on migration)
 
 ### S3/Terraform Backend
+
+## Jenkins GitHub Credentials 
+If you want your pirvate keys available, you need to load them into an S3 bucker #TODO: Set up Keys, and S3 Bucket
+
 ```bash
 git clone git@github.com:Plnt9/aws-pipeline-v2.git
 cd aws-pipeline-v2
@@ -43,18 +47,23 @@ terraform init
 
 Run an `aws s3 ls` before you start for a sanity check.
 
-### <a name="state"></a> Importing State
+###  Importing State
 ```
 terraform import aws_s3_bucket.statefiles_for_app <YOU_S3_BUCKET>
 terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOUR_S3_DYNAMODB_TABLE> #(e.g. alan.planet9.my.statefile
 ```
 
-## Bootstrapping
 
-The docker images
 
-## Jenkins
-TODO: Set up Keys, and S3 Bucket
+### Post Bootstrapping
+
+The docker images are available here:
+* [Demo NPM Project](https://github.com/codecrunchers/helloworld-npm) for pipeline build and Deploy
+* [Jekins Node/NPM Slave](https://github.com/codecrunchers/jenkins-node-slave)
+* [Jenkins Master](https://github.com/codecrunchers/jenkinsci)
+
+These will need to be tagged and pushed, see script to run `post terraform apply`
+
 
 ## Sonar
 You will need to manually configure Sonar for now.  Jenkins has 1 Sonar server configured, https://record.domain.tld/sonar/ (i.e. your ALB)
