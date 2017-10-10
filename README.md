@@ -55,6 +55,15 @@ terraform import aws_s3_bucket.statefiles_for_app <YOU_S3_BUCKET>
 terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOUR_S3_DYNAMODB_TABLE> #(e.g. alan.planet9.my.statefile
 ```
 
+### Plan and Apply
+`terraform plan`
+`terraform apply`
+
+### Services
+The ALB Endpoint will appear in the output.
+* Jenkins can be accessed at http://<lb>/jenkins/)
+* Sonar can be accessed at http://<lb>/sonar/)
+* Sonar can be accessed at http://<lb>/nexus/)
 
 
 ### Post Bootstrapping
