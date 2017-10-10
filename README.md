@@ -1,29 +1,30 @@
-# Docker Backed AutoScaling ECS Managed Amazon Pipelin
+# Docker Backed AutoScaling ECS Managed Amazon Pipeline
 
-This is a  `fully managed` ECS/Container Driven build Continuous Delivery Platform.  
+This is a  `fully managed` ECS/Container Driven build Continuous Delivery Platform.
 
-# Features
-* Scalable Jenkins Build Masters.
+This is a working, but basic enterprise deployment platform for AWS - with a central theme of deploying via a Managed Jenkins ECS cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get
+
+* Secure Public / Private  VPC setup with NAT & IGW
+* NAT between public and private subnets
+* Service discover via a consul cluster backed by a Private AWS Hosted Zone (no more ENV concerns, each VPC has it's own DNS, db.p9.io is correct in every env/VPC -  developers don't ever worry about config such as + "_${ENV}" )
+* An internet gateway for handling all traffic.
+* An ECS backed managed cluster of Jenkins slaves with a governing master.
+* Scalable Node/Javascript slaves, lifecycle managed by ECS & Jenkins.
+* A Jenkins 2.0 Master extended from jenkinsci/jenkins customised to run a build on first boot.
+* Jenkins Jobs to Create Deployable Development Environments sucvh Prod/QA/Staging *
 * Sonar for source code analysis
 * Nexus Artifactory
-* Consul for internal service discovery
-* Private Hosted Amazon DNS Zone ( developers don't ever worry about config such as + "_${ENV}" )
-* Auto Registering Scalable Jenkins Build Slaves. *
-* Uses Jenkins 2 Pipeline, Build for any Dev environment, just add Jenkins/Docker slave tasks & images in ECS
 * Easily extendable with new services
-* Secure Public / Private  VPC setup with NAT & IGW
-* Jenkins Jobs to Create Deployable Development Environments sucvh Prod/QA/Staging *
 * Automatic Peering to new VPCs for Deployment *
-
-`* in the pipeline so to say`
 
 
 ## Initial Setup
 Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.11 so no workspaces for now.
-## Manual via Web Console
-* Create your `S3` bucket (enable Versioning) and match it to the name in `statefile.tf`
-* Create your `DynamoDB` instance , again matching the names in `statefile.tf`
-* Create a keypair, matching the name to the value of `key_name` in `terraform.tfstate`
+
+## Manual CLI Steps (or do the same  via Web Console)
+1. Create your `S3` bucket for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf` [State Step] (#state)
+2. Create your `DynamoDB` instance , again matching the names in `statefile.tf` - same as Step 1
+3. Create a keypair, matching the name to the value of `key_name` in `terraform.tfstate` save the .pem file as shown below.
 
 ## Terraforming
 This expects your AWS env vars to be exported, in my case (I use MFA && IAM)
@@ -39,7 +40,7 @@ Run an `aws s3 ls` for a sanity check
 * `terraform get`
 * `terraform init`
 
-### Importing State
+### <a name="state"></a> Importing State
 //* `terraform import aws_key_pair.deployer <YOUR_KEY_NAME>`
 * `terraform import aws_s3_bucket.statefiles_for_app <YOU_S3_BUCKET>`
 * `terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOUR_S3_DYNAMODB_TABLE>` (alan.planet9.statefiles-pipeline-v2-lock)
@@ -60,7 +61,7 @@ Manually allow your own ip for a single ssh session. SSH in via the key we produ
 From there, you can access the Debug box, this has access to the entire VPC.
 
 
-##AWS Commands for Manual Steps
+## AWS Commands for Manual Steps
 ### DynamoDB
 `aws dynamodb create-table \
     --table-name <statefile.tf.dyanodb.name> \
@@ -79,3 +80,7 @@ From there, you can access the Debug box, this has access to the entire VPC.
 
 ## TODO
 * If New docker image is uploaded for Jenkins, the instance will use the the  files left on the EFS by the original Task invocatio, i.e. it won't update as you would expect as  the conifg is already in place. The disk needs to be wiped
+* SSL
+* Output all DNS entries
+* Jobs for VPC Building
+* VPC Peering module

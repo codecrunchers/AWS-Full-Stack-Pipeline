@@ -141,7 +141,7 @@ module "jenkins" {
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkins"
     ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
-    jenkins_ip                = "http://10.0.1.113:8080/jenkins"
+    jenkins_ip                = "http://10.0.1.113:8080/jenkins"                 #TODO Hardcoded
     aws_account_id            = "${data.aws_caller_identity.current.account_id}"
   }
 
