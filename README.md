@@ -1,4 +1,4 @@
-# Docker Backed AutoScaling ECS Managed Amazon Pipeline
+# Enterpirse Development and Deployment via a Docker Backed AutoScaling ECS Managed Amazon Pipeline
 
 This is a  `fully managed` ECS/Container Driven build Continuous Delivery Platform.
 
