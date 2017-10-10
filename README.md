@@ -63,9 +63,9 @@ terraform apply
 
 ### Services
 The ALB Endpoint will appear in the output.
-* Jenkins can be accessed at http://<lb>/jenkins/)
-* Sonar can be accessed at http://<lb>/sonar/)
-* Sonar can be accessed at http://<lb>/nexus/)
+* Jenkins can be accessed at http://LOAD_BALANCER/jenkins/)
+* Sonar can be accessed at http://LOAD_BALANCER/sonar/)
+* Sonar can be accessed at http://LOAD_BALANCER/nexus/)
 
 
 ### Post Bootstrapping
