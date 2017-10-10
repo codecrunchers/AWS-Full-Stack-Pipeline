@@ -22,12 +22,18 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.11 so no workspaces for now.
 
 ## Manual CLI Steps (or do the same  via Web Console)
-1. [ Create your `S3` bucket for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf`](#state)
-2. Create your `DynamoDB` instance , again matching the names in `statefile.tf` - same as Step 1
-3. Create a keypair, matching the name to the value of `key_name` in `terraform.tfstate` save the .pem file as shown below.
+1. [Create your `S3` bucket](#state) for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf`
+2. [Create your `DynamoDB` instance](#dynamo) , again matching the names in `statefile.tf` - same as Step 1
+3. [Create a keypair](#keypair), matching the name to the value of `key_name` in `terraform.tfstate` save the .pem file as shown below.
 
-## Terraforming
-This expects your AWS env vars to be exported, in my case (I use MFA && IAM)
+## Initialising state and deploying via Terraforming
+1. Install terraform, currently 0.9.11 (working on migration)
+
+### S3/Terraform Backend
+* `terraform get`
+* `terraform init`
+...This expects your AWS env vars to be exported, in my case (I use MFA && IAM)
+
 * AWS_ACCESS_KEY_ID
 * AWS_EXPIRATION_TOKEN 
 * AWS_SECRET_ACCESS_KEY
@@ -36,9 +42,6 @@ This expects your AWS env vars to be exported, in my case (I use MFA && IAM)
 
 Run an `aws s3 ls` for a sanity check
 
-### S3/Terraform Backend
-* `terraform get`
-* `terraform init`
 
 ### <a name="state"></a> Importing State
 //* `terraform import aws_key_pair.deployer <YOUR_KEY_NAME>`
