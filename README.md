@@ -61,13 +61,6 @@ terraform plan
 terraform apply
 ```
 
-### Services
-The ALB Endpoint will appear in the output.
-* Jenkins can be accessed at http://LOAD_BALANCER/jenkins/)
-* Sonar can be accessed at http://LOAD_BALANCER/sonar/)
-* Sonar can be accessed at http://LOAD_BALANCER/nexus/)
-
-
 ### Post Bootstrapping
 
 The docker images are available here:
@@ -77,20 +70,26 @@ The docker images are available here:
 
 These will need to be tagged and pushed, see script to run `post terraform apply`
 
+### Services
+Once these have been pushed, the ALB Endpoint which appeared in the output of `terraform apply` can be accessed:
+* Jenkins can be accessed at http://LOAD_BALANCER/jenkins/)
+* Sonar can be accessed at http://LOAD_BALANCER/sonar/)
+* Sonar can be accessed at http://LOAD_BALANCER/nexus/)
 
-## Sonar
-You will need to manually configure Sonar for now.  Jenkins has 1 Sonar server configured, https://record.domain.tld/sonar/ (i.e. your ALB)
-
-## Nexus
-Nexius is deployed, but likewise not configured
-
-## VPN
+#### VPN
 * [Docs(https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-ec2-appliance-ami-quick-start-guide/)
 
 Manually allow your own ip for a single ssh session. SSH in via the key we produced at the start, and run through the cli prompts - takes about 2 mns. At the end do a `sudo passwd openvpn` - you can now hit the HTTPS port of this machine and download your VPN config file.  
 
-### Debug Box
+#### Debug Box / Bastion / Jump Box
 From there, you can access the Debug box, this has access to the entire VPC.
+
+#### Sonar
+You will need to manually configure Sonar for now.  Jenkins has 1 Sonar server configured, https://record.domain.tld/sonar/ (i.e. your ALB)
+
+#### Nexus
+Nexius is deployed, but likewise not configured
+
 
 ## AWS Commands for Manual Steps
 ### <a name="dynamodb"></a> DynamoDB
@@ -111,9 +110,8 @@ aws ec2 create-key-pair --key-name <variables.tf.key_name> --query 'KeyMaterial'
 chmod 400 pipeline-ecs.pem
 ```
 
-
-
 ## TODO
+* Lots
 * If New docker image is uploaded for Jenkins, the instance will use the the  files left on the EFS by the original Task invocatio, i.e. it won't update as you would expect as  the conifg is already in place. The disk needs to be wiped
 * Finalise consul and DNS
 * SSL
