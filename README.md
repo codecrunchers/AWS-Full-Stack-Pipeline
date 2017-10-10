@@ -1,7 +1,7 @@
 # Enterprise Development and Deployment 
 ## A Docker Backed AutoScaling ECS Managed Amazon Pipeline
 
-This is a *fully managed* ECS/Container Driven build Continuous Delivery Platform.
+This is a *fully managed* ECS/Container Driver Continuous Delivery Platform for building, testing and Production deployment
 
 This is a working, but basic enterprise deployment platform for AWS - with a central theme of deploying via a Managed Jenkins ECS cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get
 
@@ -38,8 +38,9 @@ git clone git@github.com:Plnt9/aws-pipeline-v2.git
 cd aws-pipeline-v2
 terraform get
 terraform init
-[<import state>](#state)
 ```
+[<import state>](#state)
+
 Run an `aws s3 ls` before you start for a sanity check.
 
 ### <a name="state"></a> Importing State
