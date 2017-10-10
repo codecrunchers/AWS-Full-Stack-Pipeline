@@ -1,5 +1,5 @@
 # Enterprise Development and Deployment
-## A Docker Backed AutoScaling ECS Managed Amazon Pipeline
+## A Docker Backed auto scaling ECS Managed Amazon Pipeline with Production Env
 
 This is a *fully managed* ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment
 
