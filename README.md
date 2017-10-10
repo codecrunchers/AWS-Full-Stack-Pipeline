@@ -22,7 +22,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 
 ## AWS Architecture
 Rough Idea with Second Prod VP:
-<img src="./docs/imgs/Pipeline_Overview.png"/>
+![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/Pipeline_Overview.png)
 
 
 ## Initial Setup
