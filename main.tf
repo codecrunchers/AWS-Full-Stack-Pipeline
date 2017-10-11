@@ -130,7 +130,7 @@ module "jenkins" {
 module "ecr_repos" {
   source      = "modules/ecr_terraform_module"
   environment = "${var.environment}"
-  registries  = ["pipeline/jenkins", "pipeline/jenkinsslave", "pipeline/consul"]
+  registries  = ["pipeline/jenkins", "pipeline/consul"] #TODO Vars
 }
 
 resource "aws_key_pair" "deployer" {
