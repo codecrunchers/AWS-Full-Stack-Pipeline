@@ -1,9 +1,9 @@
 # Enterprise Development and Deployment
 ## A ECS managed Docker auto scaling CI/CD Pipeline with a Production Env for AWS
 
-This is a *fully managed* ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment
+This is a _fully managed_ ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment. You can add  additonal VPC/Environments such as Staging or QA, delivering steady state Production deployments.
 
-A working, but basic enterprise deployment platform for deploying code in AWS. There is a cenrtal theme of deploying via a Managed Jenkins ECS Cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get:
+A working, but basic enterprise deployment platform for deploying code in AWS. There is a cenrtal theme of deploying via a Managed Jenkins ECS Cluster.  There's plenty of work to do, incl. security concerns _(caveat emptor)_ - but out of the box with a few configuration steps you get:
 
 * Secure Public / Private  VPC setup with NAT & IGW
 * Service Discovery via a [Consul](http://www.consul.io) cluster backed by a Private AWS Hosted Zone
