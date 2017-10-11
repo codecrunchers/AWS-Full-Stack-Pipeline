@@ -25,12 +25,14 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * Secure keyless Key,Value store
 
 ## AWS Architecture
-![Rough Idea with Second Prod VP:](https://drive.google.com/file/d/0B6rlckp3x7UkbE5XMzlIYm1ma1U/view?usp=sharing)
+![Rough Idea with Second Prod VP:](./docs/images/Pipeline_Overview.png)
 <a href="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkbE5XMzlIYm1ma1U"><img src="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkbE5XMzlIYm1ma1U" style="width: 500px; max-width: 100%; height: auto" title="Click for the larger version." /></a>
 
 ## Less Tech View
-![Software Development Lifecycle](https://drive.google.com/file/d/0B6rlckp3x7UkUDA0NTdNOV9XY0k/view?usp=sharing)
-<a href="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkUDA0NTdNOV9XY0k"><img src="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkbE5XMzlIYm1ma1U" style="width: 500px; max-width: 100%; height: auto" title="Click for the larger version." /></a>
+![Software Development Lifecycle](./docs/imgs/PipelineInPics.png)
+<a href="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkUDA0NTdNOV9XY0k"><img src="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkUDA0NTdNOV9XY0k" style="width: 500px; max-width: 100%; height: auto" title="Click for the larger version." /></a>
+
+
 
 
 ## Initial Setup
