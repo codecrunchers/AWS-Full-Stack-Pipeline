@@ -27,7 +27,7 @@ Rough Idea with Second Prod VP:
 
 
 ## Initial Setup
-Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.11 so no workspaces for now.
+Some manual steps at the moment, we're working on these.  Using terraform 0.9.11,  so no workspaces for now.
 
 ## Manual CLI Steps (or do the same  via Web Console)
 1. [Create your `S3` bucket](#s3) for state management, (enable Versioning & encryption) this is the value of bucket in `statefile.tf`
@@ -37,12 +37,10 @@ Some manual steps at the moment, I'm working on these.  I'm using terraform 0.9.
 ## Jenkins GitHub Credentials
 If you want your pirvate keys available, you need to load them into an S3 bucker #TODO: Set up Keys, and S3 Bucket
 
-
 ## Initialising state and deploying via Terraforming
 Install terraform, currently 0.9.11 (working on migration)
 
 ### S3/Terraform Backend
-
 
 ```bash
 git clone git@github.com:Plnt9/aws-pipeline-v2.git
@@ -54,13 +52,13 @@ terraform init
 
 Run an `aws s3 ls` before you start for a sanity check.
 
-###  Importing State
+###<a name="state"></a> Importing State
 ```
 terraform import aws_s3_bucket.statefiles_for_app <YOU_S3_BUCKET>
 terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOUR_S3_DYNAMODB_TABLE> #(e.g. alan.planet9.my.statefile
 ```
 
-### Plan and Apply
+### Plan and Apply (this will cost money)
 ```bash
 terraform plan
 terraform apply
