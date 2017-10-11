@@ -25,14 +25,10 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * Secure keyless Key,Value store
 
 ## AWS Architecture
-Rough Idea with Second Prod VP:
-![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/Pipeline_Overview.png)
+![Rough Idea with Second Prod VP:](https://drive.google.com/file/d/0B6rlckp3x7UkbE5XMzlIYm1ma1U/view?usp=sharing)
 
 ## Less Tech View
-
-Rough Idea with Second Prod VP:
-![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/PipelineInPics.png)
-
+![Software Development Lifecycle](https://drive.google.com/file/d/0B6rlckp3x7UkTUg2c1djeUZ3Z1U/view?usp=sharing)
 
 ## Initial Setup
 Some manual steps at the moment, we're working on these.  Using terraform 0.9.11,  so no workspaces for now.
@@ -88,7 +84,7 @@ Once these have been pushed, the ALB Endpoint which appeared in the output of `t
 * Sonar can be accessed at http://LOAD_BALANCER/nexus/)
 
 #### VPN
-* [Docs(https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-ec2-appliance-ami-quick-start-guide/)
+* [OpenVPN AMI Docs](https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-ec2-appliance-ami-quick-start-guide/)
 
 Manually allow your own ip for a single ssh session. SSH in via the key we produced at the start, and run through the cli prompts - takes about 2 mns. At the end do a `sudo passwd openvpn` - you can now hit the HTTPS port of this machine and download your VPN config file.  
 
@@ -131,4 +127,5 @@ chmod 400 pipeline-ecs.pem
 * VPC Peering module
 * Configure Sonar
 * Configure Nexus
+* OSS VPN
 
