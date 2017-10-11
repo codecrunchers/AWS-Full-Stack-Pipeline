@@ -21,6 +21,8 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * A VPN
 * Cloudwtach Logging for most features
 * Multi AZ with EFS & RDS Storage
+* Encrypted State with Locking enabled
+* Secure keyless Key,Value store
 
 ## AWS Architecture
 Rough Idea with Second Prod VP:
