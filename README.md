@@ -8,7 +8,7 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * Secure Public / Private  VPC setup with NAT & IGW
 * Service Discovery via a [Consul](http://www.consul.io) cluster backed by a Private AWS Hosted Zone
 
-       No more ENV concerns, each VPC has it's own DNS, [db.mydomain.io](#nowhere) is correct in every env/VPC.  Developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
+    No more ENV concerns, each VPC has it's own DNS, [db.mydomain.io](#nowhere) is correct in every env/VPC.  Developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
 * A scalable ECS backed managed cluster of Jenkins slaves with a governing master.
 * Scalable Node/Javascript build slaves, lifecycle managed by ECS & Jenkins.
 * A Jenkins 2.0 Master extended from [jenkins/jenkins](https://hub.docker.com/r/jenkins/jenkins/)  customised to run a build on first boot.
