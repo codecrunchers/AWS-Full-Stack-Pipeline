@@ -1,5 +1,5 @@
 # Enterprise Development and Deployment
-## A ECS managed Docker auto scaling CI/CD Pipeline with a Production Env for AWS
+## An ECS managed Docker auto scaling CI/CD Pipeline with a Production Env for AWS
 
 This is a _fully managed_ ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment. You can add  additonal VPC/Environments such as Staging or QA, delivering steady state Production deployments.
 
@@ -32,7 +32,6 @@ Rough Idea with Second Prod VP:
 
 Rough Idea with Second Prod VP:
 ![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/PipelineInPics.png)
-
 
 
 ## Initial Setup
