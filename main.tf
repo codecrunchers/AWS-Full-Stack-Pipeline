@@ -64,10 +64,6 @@ module "cloudwatch_pipeline" {
       retention_in_days = 14
     },
     {
-      name              = "jenkinsSlave"
-      retention_in_days = 14
-    },
-    {
       name              = "jenkins"
       retention_in_days = 14
     },
