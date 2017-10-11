@@ -1,13 +1,14 @@
 # Enterprise Development and Deployment
-## A Docker Backed auto scaling ECS Managed Amazon Pipeline with Production Env
+## A ECS managed Docker auto scaling CI/CD Pipeline with a Production Env for AWS
 
 This is a *fully managed* ECS/Container Driven Continuous Delivery Platform for building, testing and Production deployment
 
-This is a working, but basic enterprise deployment platform for AWS - with a central theme of deploying via a Managed Jenkins ECS cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get
+A working, but basic enterprise deployment platform for deploying code in AWS. There is a cenrtal theme of deploying via a Managed Jenkins ECS Cluster.  There's plenty of work to do, incl. security concerns (caveat emptor) - but out of the box with a few configuration steps you get:
 
 * Secure Public / Private  VPC setup with NAT & IGW
-* Service Discovery via a [Consul](http://www.consul.io) cluster backed by a Private AWS Hosted Zone 
----No more ENV concerns, each VPC has it's own DNS, [db.mydomain.io](#nowhere) is correct in every env/VPC.  Developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
+* Service Discovery via a [Consul](http://www.consul.io) cluster backed by a Private AWS Hosted Zone
+
+   No more ENV concerns, each VPC has it's own DNS, [db.mydomain.io](#nowhere) is correct in every env/VPC.  Developers don't ever worry about config such as + "_${ENV}" ) <somewhat work in practice>
 * A scalable ECS backed managed cluster of Jenkins slaves with a governing master.
 * Scalable Node/Javascript build slaves, lifecycle managed by ECS & Jenkins.
 * A Jenkins 2.0 Master extended from [jenkins/jenkins](https://hub.docker.com/r/jenkins/jenkins/)  customised to run a build on first boot.
