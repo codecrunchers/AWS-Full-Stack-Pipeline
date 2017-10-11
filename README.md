@@ -28,6 +28,12 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 Rough Idea with Second Prod VP:
 ![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/Pipeline_Overview.png)
 
+## Less Tech View
+
+Rough Idea with Second Prod VP:
+![alt text](https://github.com/Plnt9/aws-pipeline-v2/blob/master/docs/imgs/PipelineInPics.png)
+
+
 
 ## Initial Setup
 Some manual steps at the moment, we're working on these.  Using terraform 0.9.11,  so no workspaces for now.
