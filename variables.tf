@@ -52,6 +52,10 @@ variable "jenkins_pipeline_definition" {
   type = "map"
 }
 
+variable "nexus_definition" {
+  type = "map"
+}
+
 variable "consul_definition" {
   type = "map"
 }

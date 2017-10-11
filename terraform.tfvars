@@ -36,6 +36,16 @@ consul_definition = {
   instance_count             = "0"
 }
 
+nexus_definition = {
+  docker_image_tag           = "sonatype/nexus:oss"
+  name                       = "nexus"
+  context                    = "nexus"
+  host_port_to_expose        = "8081"
+  container_port_to_expose   = "8081"
+  instance_memory_allocation = "1024"
+  instance_count             = "1"
+}
+
 jenkins_pipeline_definition = {
   docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/jenkins"
   name                       = "jenkins"

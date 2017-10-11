@@ -13,3 +13,11 @@ output "debug_box_private_ip" {
 output "consul_private_ip" {
   value = "${module.vpc_pipeline.consul_private_ip}"
 }
+
+output "vpc_id" {
+  value = "${module.vpc_pipeline.id}"
+}
+
+output "private_subnet_ids" {
+  value = ["${module.vpc_pipeline.private_subnet_ids}"]
+}

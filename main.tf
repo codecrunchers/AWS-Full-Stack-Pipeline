@@ -3,8 +3,8 @@ module "vpc_pipeline" {
   name                       = "Pipeline-VPC"                      #TODO Var
   region                     = "${var.region}"
   key_name                   = "${aws_key_pair.deployer.key_name}"
-  cidr_block                 = "10.0.0.0/16"
-  external_access_cidr_block = "0.0.0.0/0"
+  cidr_block                 = "${var.cidr_block}"
+  external_access_cidr_block = "${var.external_access_cidr_block}"
   private_subnet_cidr_blocks = "${var.private_subnet_cidr_blocks}"
   public_subnet_cidr_blocks  = "${var.public_subnet_cidr_blocks}"
   availability_zones         = "${var.availability_zones}"
@@ -44,12 +44,12 @@ module "pipeline_ecs" {
     "83.70.128.30/32",
   ] #TODO Vars
 
-  low_port              = 8080                                                             #TODO mmmm
+  low_port              = 8080                                                                                  #TODO mmmm
   high_port             = 9000
   vpc_id                = "${module.vpc_pipeline.id}"
   ecs_params            = "${var.ecs_params}"
   cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
-  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition)}"
+  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition,var.nexus_definition)}"
   consul_private_ip     = "${module.vpc_pipeline.consul_private_ip}"
 }
 
@@ -69,6 +69,10 @@ module "cloudwatch_pipeline" {
     },
     {
       name              = "consul"
+      retention_in_days = 14
+    },
+    {
+      name              = "nexus"
       retention_in_days = 14
     },
   ]
@@ -100,6 +104,26 @@ module "consul" {
   region = "${var.region}"
 
   target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #Consul
+}
+
+module "nexus" {
+  source              = "modules/jenkins_terraform_module"
+  environment         = "${var.environment}"
+  name                = "${var.name}"
+  pipeline_definition = "${var.nexus_definition}"
+  docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.name}/${var.environment}/nexus"
+    jenkins_ip                = "http://10.0.1.113:8080/jenkins"           #TODO Hardcoded
+    consul_private_ip         = "${module.vpc_pipeline.consul_private_ip}"
+  }
+
+  region = "${var.region}"
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[2]}" #Nexus
 }
 
 module "jenkins" {
