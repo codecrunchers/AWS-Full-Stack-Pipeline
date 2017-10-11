@@ -19,6 +19,7 @@ This is a working, but basic enterprise deployment platform for AWS - with a cen
 * A Bastion Jump Box accessible via
 * A VPN
 * Cloudwtach Logging for most features
+* Multi AZ with EFS & RDS Storage
 
 ## AWS Architecture
 Rough Idea with Second Prod VP:
