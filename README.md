@@ -25,7 +25,7 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * Secure keyless Key,Value store
 
 ## AWS Architecture
-![Rough Idea with Second Prod VP:](https://drive.google.com/file/d/0B6rlckp3x7UkbE5XMzlIYm1ma1U/view)
+![Rough Idea with Second Prod VP:](https://drive.google.com/file/d/0B6rlckp3x7UkbE5XMzlIYm1ma1U/view?usp=sharing)
 
 ## Less Tech View
 ![Software Development Lifecycle](https://drive.google.com/file/d/0B6rlckp3x7UkTUg2c1djeUZ3Z1U/view?usp=sharing)
