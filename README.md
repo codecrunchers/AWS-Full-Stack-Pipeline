@@ -53,7 +53,7 @@ terraform init
 
 Run an `aws s3 ls` before you start for a sanity check.
 
-###<a name="state"></a> Importing State
+### <a name="state"></a> Importing State
 ```
 terraform import aws_s3_bucket.statefiles_for_app <YOU_S3_BUCKET>
 terraform import aws_dynamodb_table.terraform_statelock terraform_statelock <YOUR_S3_DYNAMODB_TABLE> #(e.g. alan.planet9.my.statefile
