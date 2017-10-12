@@ -42,7 +42,12 @@
                 {
                     "sourceVolume": "jenkins_home",
                     "containerPath": "/var/jenkins_home"
+                },
+                {
+                    "sourceVolume": "p9_backups",
+                    "containerPath": "/p9_backups"
                 }
+
             ],
             "logConfiguration": {
 				"logDriver": "awslogs",

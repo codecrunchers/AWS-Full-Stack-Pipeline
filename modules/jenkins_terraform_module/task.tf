@@ -3,8 +3,15 @@ resource "aws_ecs_task_definition" "pipeline" {
   container_definitions = "${data.template_file.jenkins_task_definition_file.rendered}"
 
   volume {
-    name      = "jenkins_home"
-    host_path = "/efs/jenkins_home/"
+    v1 = {
+      name      = "jenkins_home"
+      host_path = "/efs/jenkins_home/"
+    }
+
+    v2 = {
+      name      = "p9_backups"
+      host_path = "/efs/backup/"
+    }
   }
 }
 

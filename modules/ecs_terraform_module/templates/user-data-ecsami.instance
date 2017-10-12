@@ -21,7 +21,12 @@ Content-Type: text/x-shellscript; charset="us-ascii"
 # Create jenkins_home
 cloud-init-per once mkdir_jh mkdir /efs/jenkins_home
 cloud-init-per once chown_jh chown ec2-user /efs/jenkins_home
-cloud-init-per once chmod_jh chmod 777 /efs/jenkins_home
+cloud-init-per once chmod_jh chmod 775 /efs/jenkins_home
+
+# Create backup dir
+cloud-init-per once mkdir_jh mkdir /efs/backup
+cloud-init-per once chown_jh chown ec2-user /efs/backup
+cloud-init-per once chmod_jh chmod 775 /efs/backup
 
 # Create nexus-data
 cloud-init-per once mkdir_jh mkdir /efs/nexus-data
