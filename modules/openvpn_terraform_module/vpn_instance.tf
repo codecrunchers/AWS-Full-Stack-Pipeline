@@ -15,6 +15,7 @@ resource "aws_instance" "vpn" {
     "Name"       = "vpn"
     "stack_name" = "vpn-${var.environment}"
     "stack_id"   = "0bc300f5-cce5-4224-b63f-446734f2e0a9"
+    ServerRole   = "VPN"
   }
 }
 

@@ -107,6 +107,7 @@ resource "aws_instance" "consulinstance" {
     subnet      = "private"
     role        = "dns"
     environment = "${var.environment}"
+    ServerRole  = "DNS/Consul"
   }
 
   user_data = "${data.template_file.user_data.rendered}"
