@@ -1,17 +1,21 @@
-output "vpn_ip" {
-  value = "${module.vpn_instance.vpn_ip}"
+output "jenkins_endpoint" {
+  value = "http://${module.pipeline_ecs.alb_endpoint}/jenkins/"
 }
 
-output "alb_endpoint" {
-  value = "${module.pipeline_ecs.alb_endpoint}"
+output "nexus_endpoint" {
+  value = "http://${module.pipeline_ecs.alb_endpoint}/nexus/"
 }
 
-output "debug_box_private_ip" {
+output "bastion_private_ip" {
   value = "${aws_instance.debug_box.private_ip}"
 }
 
 output "consul_private_ip" {
   value = "${module.vpc_pipeline.consul_private_ip}"
+}
+
+output "vpn_ip" {
+  value = "${module.vpn_instance.vpn_ip}"
 }
 
 output "vpc_id" {

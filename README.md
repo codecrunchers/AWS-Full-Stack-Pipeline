@@ -24,6 +24,7 @@ A working, but basic enterprise deployment platform for deploying code in AWS. T
 * Encrypted State with Locking enabled
 * Secure keyless Key,Value store
 
+
 ## AWS Architecture
 ![Rough Idea with Second Prod VP:](./docs/images/Pipeline_Overview.png)
 <a href="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkZjFTZTBEOTZoeVk"><img src="https://drive.google.com/uc?export=view&id=0B6rlckp3x7UkZjFTZTBEOTZoeVk" style="width: 500px; max-width: 100%; height: auto" title="Click for the larger version." /></a>
@@ -173,3 +174,4 @@ chmod 400 pipeline-ecs.pem
 * OSS VPN
 * SSL
 * Encrypt EFS
+* Restrict ECS Role Permissions
