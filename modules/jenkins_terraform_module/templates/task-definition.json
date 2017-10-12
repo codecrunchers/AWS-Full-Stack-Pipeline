@@ -5,6 +5,7 @@
 			"memoryReservation": ${memory},
 			"name": "${container_name}",
             "command":["--prefix=/jenkins"],
+            "dnsServers":["${consul_ip}"],
 			"portMappings": [
 				{
 					"containerPort": ${container_port},

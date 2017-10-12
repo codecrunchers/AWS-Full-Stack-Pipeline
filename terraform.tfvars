@@ -33,7 +33,7 @@ consul_definition = {
   host_port_to_expose        = "8500"                                                             #ALB
   container_port_to_expose   = "8500"                                                             #ALB
   instance_memory_allocation = "512"
-  instance_count             = "0"
+  instance_count             = "1"
 }
 
 nexus_definition = {

@@ -115,10 +115,10 @@ module "nexus" {
   consul_private_ip   = "${module.vpc_pipeline.consul_private_ip}"
 
   ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"    #TODO: Refactor these maps, messy
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"                 #TODO: Refactor these maps, messy
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/nexus"
-    jenkins_ip                = "http://10.0.1.113:8080/jenkins"       #TODO Hardcoded
+    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
   }
 
   region = "${var.region}"
@@ -132,13 +132,14 @@ module "jenkins" {
   name                = "${var.name}"
   pipeline_definition = "${var.jenkins_pipeline_definition}"
   docker_image_tag    = "${var.jenkins_pipeline_definition["docker_image_tag"]}"
+  consul_private_ip   = "${module.vpc_pipeline.consul_private_ip}"
 
   ecs_details = {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkins"
     ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
-    jenkins_ip                = "http://10.0.1.113:8080/jenkins"                 #TODO Hardcoded
+    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
     aws_account_id            = "${data.aws_caller_identity.current.account_id}"
   }
 

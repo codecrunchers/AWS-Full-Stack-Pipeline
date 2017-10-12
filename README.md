@@ -77,7 +77,7 @@ The docker images are available here:
 * [Jekins Node/NPM Slave](https://github.com/codecrunchers/jenkins-node-slave)
 * [Jenkins Master](https://github.com/codecrunchers/jenkinsci)
 
-These will need to be tagged and pushed, see script to run `post terraform apply`
+These will need to be tagged and pushed, see script to run `post terraform apply`  It pulls most from DockerHub now
 
 ### Services
 Once these have been pushed, the ALB Endpoint which appeared in the output of `terraform apply` can be accessed:
@@ -106,9 +106,25 @@ consul.cd-pipeline.io.	60	IN	A	10.0.1.27
 ;; SERVER: 10.0.0.2#53(10.0.0.2)
 ;; WHEN: Thu Oct 12 00:18:09 2017
 ;; MSG SIZE  rcvd: 55
+➜  tf git:(master) dig @10.0.1.27 jenkinsci-8080.service.consul
 
-[ec2-user@ip-10-0-1-68 ~]$ 
+; <<>> DiG 9.10.3-P4-Ubuntu <<>> @10.0.1.27 jenkinsci-8080.service.consul
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 47376
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
 
+;; QUESTION SECTION:
+;jenkinsci-8080.service.consul.	IN	A
+
+;; ANSWER SECTION:
+jenkinsci-8080.service.consul. 0 IN	A	10.0.1.203
+
+;; Query time: 34 msec
+;; SERVER: 10.0.1.27#53(10.0.1.27)
+;; WHEN: Thu Oct 12 03:29:55 IST 2017
+;; MSG SIZE  rcvd: 92
 ```
 
 #### VPN

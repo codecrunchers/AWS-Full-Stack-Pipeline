@@ -12,7 +12,7 @@ data "template_file" "jenkins_task_definition_file" {
   template = "${file("${path.module}/templates/task-definition.json")}"
 
   vars {
-    consul_ip        = ""
+    consul_ip        = "${var.consul_private_ip}"
     image_url        = "${var.docker_image_tag}"
     container_name   = "${lookup(var.pipeline_definition, "name")}"
     log_group_name   = "${lookup(var.ecs_details, "cw_app_pipeline_log_group")}"
