@@ -172,4 +172,4 @@ chmod 400 pipeline-ecs.pem
 * Configure Nexus
 * OSS VPN
 * SSL
-
+* Encrypt EFS

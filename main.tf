@@ -139,7 +139,6 @@ module "jenkins" {
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkins"
     ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
-    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
     aws_account_id            = "${data.aws_caller_identity.current.account_id}"
   }
 

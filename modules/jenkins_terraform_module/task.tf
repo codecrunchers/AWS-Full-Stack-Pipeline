@@ -3,15 +3,13 @@ resource "aws_ecs_task_definition" "pipeline" {
   container_definitions = "${data.template_file.jenkins_task_definition_file.rendered}"
 
   volume {
-    v1 = {
-      name      = "jenkins_home"
-      host_path = "/efs/jenkins_home/"
-    }
+    name      = "jenkins_home"
+    host_path = "/efs/jenkins_home/"
+  }
 
-    v2 = {
-      name      = "p9_backups"
-      host_path = "/efs/backup/"
-    }
+  volume {
+    name      = "p9_backups"
+    host_path = "/efs/backup/"
   }
 }
 
@@ -28,7 +26,6 @@ data "template_file" "jenkins_task_definition_file" {
     host_port        = "${lookup(var.pipeline_definition, "host_port_to_expose")}"
     memory           = "${lookup(var.pipeline_definition, "instance_memory_allocation")}"
     ecs_cluster      = "${lookup(var.ecs_details, "ecs_cluster")}"
-    jenkins_ip       = "${lookup(var.ecs_details, "jenkins_ip")}"
     aws_region       = "${var.region}"
     aws_account_id   = "${lookup(var.ecs_details, "aws_account_id")}"
   }

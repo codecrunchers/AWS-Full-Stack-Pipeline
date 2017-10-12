@@ -20,18 +20,18 @@ mount -a
 Content-Type: text/x-shellscript; charset="us-ascii"
 # Create jenkins_home
 cloud-init-per once mkdir_jh mkdir /efs/jenkins_home
-cloud-init-per once chown_jh chown ec2-user /efs/jenkins_home
-cloud-init-per once chmod_jh chmod 775 /efs/jenkins_home
+cloud-init-per once chown_jh chown -R 1000 /efs/jenkins_home
+cloud-init-per once chmod_jh chmod 755 /efs/jenkins_home
 
 # Create backup dir
 cloud-init-per once mkdir_jh mkdir /efs/backup
-cloud-init-per once chown_jh chown ec2-user /efs/backup
-cloud-init-per once chmod_jh chmod 775 /efs/backup
+cloud-init-per once chown_jh chown -R 1000 /efs/backup
+cloud-init-per once chmod_jh chmod 755 /efs/backup
 
 # Create nexus-data
 cloud-init-per once mkdir_jh mkdir /efs/nexus-data
-cloud-init-per once chown_jh chown ec2-user /efs/nexus-data
-cloud-init-per once chmod_jh chmod 777 /efs/nexus-data
+cloud-init-per once chown_jh chown -R 200 /efs/nexus-data
+cloud-init-per once chmod_jh chmod 755 /efs/nexus-data
 
 #!/bin/bash
 # Set any ECS agent configuration options
