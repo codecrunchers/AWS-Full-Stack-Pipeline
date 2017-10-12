@@ -42,7 +42,6 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   iam_instance_profile = "${aws_iam_instance_profile.ecs.id}"
   enable_monitoring    = true
 
-  #  user_data                   = "#!/bin/bash\necho ECS_CLUSTER='${aws_ecs_cluster.ecs.id}' > /etc/ecs/ecs.config"
   user_data = "${data.template_file.user_data.rendered}"
 
   associate_public_ip_address = false
@@ -62,13 +61,3 @@ data "template_file" "user_data" {
     consul_ip    = "${var.consul_private_ip}"
   }
 }
-
-#data "template_file" "instance_profile" {
-#  template = "${file("${path.module}/templates/instance-profile-policy.json")}"
-#
-#  vars {
-#    app_log_group_arn       = "${var.cloudwatch_log_handle}"
-#    ecs_agent_log_group_arn = "${var.cloudwatch_log_handle}"
-#  }
-#}
-

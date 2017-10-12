@@ -85,6 +85,32 @@ Once these have been pushed, the ALB Endpoint which appeared in the output of `t
 * Sonar can be accessed at http://LOAD_BALANCER/sonar/)
 * Sonar can be accessed at http://LOAD_BALANCER/nexus/)
 
+### Consul
+Once on the VPN, every box has access to an internal Consul (cluster to come) 
+```bash
+[ec2-user@ip-10-0-1-68 ~]$ dig consul.cd-pipeline.io
+
+; <<>> DiG 9.8.2rc1-RedHat-9.8.2-0.62.rc1.56.amzn1 <<>> consul.cd-pipeline.io
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 586
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;consul.cd-pipeline.io.		IN	A
+
+;; ANSWER SECTION:
+consul.cd-pipeline.io.	60	IN	A	10.0.1.27
+
+;; Query time: 2 msec
+;; SERVER: 10.0.0.2#53(10.0.0.2)
+;; WHEN: Thu Oct 12 00:18:09 2017
+;; MSG SIZE  rcvd: 55
+
+[ec2-user@ip-10-0-1-68 ~]$ 
+
+```
+
 #### VPN
 * [OpenVPN AMI Docs](https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-ec2-appliance-ami-quick-start-guide/)
 
@@ -121,13 +147,13 @@ chmod 400 pipeline-ecs.pem
 
 ## TODO
 * Lots
-* If New docker image is uploaded for Jenkins, the instance will use the the  files left on the EFS by the original Task invocatio, i.e. it won't update as you would expect as  the conifg is already in place. The disk needs to be wiped
+* Find way to force Jenkins to reload file from Docker image if new image
 * Finalise consul and DNS
-* SSL
 * Output all DNS entries
 * Jobs for VPC Building
 * VPC Peering module
 * Configure Sonar
 * Configure Nexus
 * OSS VPN
+* SSL
 

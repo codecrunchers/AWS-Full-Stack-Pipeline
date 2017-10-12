@@ -4,7 +4,7 @@ variable "name" {}
 
 variable "environment" {}
 
-variable "nexus_definition" {
+variable "pipeline_definition" {
   type = "map"
 }
 

@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "pipeline" {
   family                = "${format("%s_%s_family", var.environment,lookup(var.pipeline_definition,"name"))}"
-  container_definitions = "${data.template_file.task_definition_file.rendered}"
+  container_definitions = "${data.template_file.jenkins_task_definition_file.rendered}"
 
   volume {
     name      = "jenkins_home"
@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "pipeline" {
   }
 }
 
-data "template_file" "task_definition_file" {
+data "template_file" "jenkins_task_definition_file" {
   template = "${file("${path.module}/templates/task-definition.json")}"
 
   vars {

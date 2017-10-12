@@ -107,18 +107,18 @@ module "consul" {
 }
 
 module "nexus" {
-  source              = "modules/jenkins_terraform_module"
+  source              = "modules/nexus_terraform_module"
   environment         = "${var.environment}"
   name                = "${var.name}"
   pipeline_definition = "${var.nexus_definition}"
   docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
+  consul_private_ip   = "${module.vpc_pipeline.consul_private_ip}"
 
   ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"    #TODO: Refactor these maps, messy
     iam_role                  = "${module.pipeline_ecs.iam_role}"
     cw_app_pipeline_log_group = "${var.name}/${var.environment}/nexus"
-    jenkins_ip                = "http://10.0.1.113:8080/jenkins"           #TODO Hardcoded
-    consul_private_ip         = "${module.vpc_pipeline.consul_private_ip}"
+    jenkins_ip                = "http://10.0.1.113:8080/jenkins"       #TODO Hardcoded
   }
 
   region = "${var.region}"

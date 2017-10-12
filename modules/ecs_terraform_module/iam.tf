@@ -13,9 +13,18 @@ resource "aws_iam_role_policy" "ecs_service_role_policy" {
 
 /* ec2 container instance role & policy */
 resource "aws_iam_role_policy" "ecs_instance_role_policy" {
-  name   = "${var.cluster_name}-ecs-instance-role-policy"
-  policy = "${file("${path.module}/policies/ecs-instance-role-policy.json")}"
+  name   = "ecs-instance-role-policy"
+  policy = "${data.template_file.ecs_instance_role_policy.rendered}"
   role   = "${aws_iam_role.ecs_role.id}"
+}
+
+data "template_file" "ecs_instance_role_policy" {
+  template = "${file("${path.module}/policies/ecs-instance-role-policy.json")}"
+
+  vars {
+    app_log_group_arn       = "${var.cloudwatch_log_handle}"
+    ecs_agent_log_group_arn = "${var.cloudwatch_log_handle}"
+  }
 }
 
 /* ec2 container instance policy to access ecr */
@@ -50,6 +59,7 @@ resource "aws_iam_role_policy" "terraform_base_policy" {
  * IAM profile to be used in auto-scaling launch configuration.
  */
 resource "aws_iam_instance_profile" "ecs" {
+  name = "${var.cluster_name}-ecs-instance-profile"
   path = "/"
   role = "${aws_iam_role.ecs_role.name}"
 }

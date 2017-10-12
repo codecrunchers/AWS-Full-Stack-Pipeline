@@ -47,7 +47,7 @@ nexus_definition = {
 }
 
 jenkins_pipeline_definition = {
-  docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/jenkins"
+  docker_image_tag           = "codecrunchers/jenkinsci:latest"
   name                       = "jenkins"
   context                    = "jenkins"
   host_port_to_expose        = "8080"
