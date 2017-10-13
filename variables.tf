@@ -30,17 +30,17 @@ variable "ecs_params" {
 
 # Eo Port
 
-variable "name" {
-  default = "Default"
-}
+#variable "name" {
+#  default = "Default"
+#}
 
 variable "project" {
   default = "Unknown"
 }
 
-variable "environment" {
-  default = "dev"
-}
+#variable "environment" {
+#  default = "dev"
+#}
 
 variable "region" {
   default = "eu-west-1"
@@ -56,19 +56,19 @@ variable "external_access_cidr_block" {
   type = "list"
 }
 
-variable "public_subnet_cidr_blocks" {
-  type    = "list"
-  default = ["10.0.0.0/24", "10.0.2.0/24"]
-}
+#variable "public_subnet_cidr_blocks" {
+#  type    = "list"
+#  default = ["10.0.0.0/24", "10.0.2.0/24"]
+#}
 
-variable "private_subnet_cidr_blocks" {
-  type    = "list"
-  default = ["10.0.1.0/24", "10.0.3.0/24"]
-}
+#variable "private_subnet_cidr_blocks" {
+#  type    = "list"
+#  default = ["10.0.1.0/24", "10.0.3.0/24"]
+#}
 
-variable "availability_zones" {
-  type = "list"
-}
+#variable "availability_zones" {
+#  type = "list"
+#}
 
 variable "dns_zone" {}
 

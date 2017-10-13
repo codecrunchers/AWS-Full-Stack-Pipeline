@@ -11,6 +11,18 @@ resource "aws_autoscaling_group" "ecs_asgrp" {
   target_group_arns         = ["${aws_alb_target_group.alb_target_groups.*.arn}"]
 
   tag {
+    key                 = "stack_name"
+    value               = "${var.stack_details["stack_name"]}"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "stack_id"
+    value               = "${var.stack_details["stack_id"]}"
+    propagate_at_launch = true
+  }
+
+  tag {
     key                 = "Name"
     value               = "${var.stack_details["env"]} ECS Host"
     propagate_at_launch = true

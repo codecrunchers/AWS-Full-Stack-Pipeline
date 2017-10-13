@@ -51,7 +51,7 @@ resource "aws_security_group" "ecs_instance_sg" {
       "${aws_security_group.alb_sg.id}",
     ]
 
-    #    cidr_blocks = ["${var.private_subnets}"] #TODO: Bug
+    cidr_blocks = ["10.171.64.0/20"] #TODO: Bug, Get CIDR Block Based on VPC
   }
 
   egress {

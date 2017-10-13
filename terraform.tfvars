@@ -1,5 +1,7 @@
 ##Port
 
+external_access_cidr_block = ["37.228.251.43/32", "83.70.128.30/32", "192.30.252.0/22", "185.199.108.0/22"] //Home,GitHUB*2
+
 alb_whitelist_cidr_blocks = [
   "37.228.251.43/32", //Alan Home
   "86.44.120.159/32", //Joe Home
@@ -13,7 +15,7 @@ alb_whitelist_cidr_blocks = [
 stack_details = {
   env         = "pre-prod"                             #Ideally Injected by Pipeline
   region      = "eu-west-1"
-  stack_id    = "fedd1ace-6766-4c95-a1c4-72a8b3f56a4b"
+  stack_id    = "8d49e858-6414-45b2-b00a-18256265c40c"
   stack_name  = "Pipeline"
   stack_owner = "tech@planet9energy.com"
 }
@@ -42,24 +44,6 @@ vpn_whitelist_cidr_blocks = ["83.70.128.30/32"]
 dns_zone = "p9e.io"
 
 key_name = "dselete-me-rds-verify"
-
-cidr_block = "10.0.0.0/16"
-
-external_access_cidr_block = ["37.228.251.43/32", "83.70.128.30/32", "192.30.252.0/22", "185.199.108.0/22"] //Home,GitHUB*2
-
-public_subnet_cidr_blocks = ["10.0.0.0/24", "10.0.2.0/24"]
-
-private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.3.0/24"]
-
-availability_zones = ["eu-west-1a", "eu-west-1b"]
-
-qa_vpc = {
-  public_subnet_cidr_blocks = ["10.0.0.0/24", "10.0.2.0/24"]
-
-  private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.3.0/24"]
-
-  availability_zones = ["eu-west-1a", "eu-west-1b"]
-}
 
 consul_definition = {
   docker_image_tag           = "492333042402.dkr.ecr.eu-west-1.amazonaws.com/tmp-pipeline/consul"

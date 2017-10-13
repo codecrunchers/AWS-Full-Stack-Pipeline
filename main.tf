@@ -75,3 +75,48 @@ module "pipeline_ecs" {
   alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition,var.nexus_definition)}"
   consul_private_ip     = "ConsulIP:TODO"                                                                       #"${module.vpc_pipeline.consul_private_ip}"
 }
+
+module "nexus" {
+  stack_details       = "${var.stack_details}"
+  source              = "modules/nexus_terraform_module"
+  pipeline_definition = "${var.nexus_definition}"
+  docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
+  consul_private_ip   = "ConsulIP:TODO"                               #"${module.vpc_pipeline.consul_private_ip}"d
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"                                    #TODO: Refactor these maps, messy
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/nexus"
+    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
+  }
+
+  region = "${var.region}"
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[2]}" #Nexus
+}
+
+module "jenkins" {
+  stack_details       = "${var.stack_details}"
+  source              = "modules/jenkins_terraform_module"
+  pipeline_definition = "${var.jenkins_pipeline_definition}"
+  docker_image_tag    = "${var.jenkins_pipeline_definition["docker_image_tag"]}"
+  consul_private_ip   = "Consul.IP"                                              #${module.vpc_pipeline.consul_private_ip}"
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/jenkins"
+    ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
+    aws_account_id            = "${data.aws_caller_identity.current.account_id}"
+  }
+
+  region = "${var.region}"
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[0]}" #Jenkins
+}
+
+module "ecr_repos" {
+  source      = "modules/ecr_terraform_module"
+  environment = "${var.stack_details["env"]}"
+  registries  = ["pipeline/jenkins", "pipeline/consul"] #TODO Vars
+}

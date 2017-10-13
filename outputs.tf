@@ -13,3 +13,11 @@ output "vpn_public_link" {
 output "vpn_private_ip" {
   value = "${module.vpn_instance.vpn_private_ip}"
 }
+
+output "jenkins_endpoint" {
+  value = "http://${module.pipeline_ecs.alb_endpoint}/jenkins/"
+}
+
+output "nexus_endpoint" {
+  value = "http://${module.pipeline_ecs.alb_endpoint}/nexus/"
+}

@@ -1,8 +1,8 @@
 variable "consul_private_ip" {}
 
-variable "name" {}
-
-variable "environment" {}
+variable "stack_details" {
+  type = "map"
+}
 
 variable "pipeline_definition" {
   type = "map"

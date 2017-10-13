@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "nexus" {
-  family                = "${format("%s_%s_family", var.environment,lookup(var.pipeline_definition,"name"))}"
+  family                = "${format("%s_%s_family", var.stack_details["env"],lookup(var.pipeline_definition,"name"))}"
   container_definitions = "${data.template_file.nexus_task_definition_file.rendered}"
 }
 

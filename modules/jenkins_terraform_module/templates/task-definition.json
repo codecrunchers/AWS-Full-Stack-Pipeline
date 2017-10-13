@@ -1,54 +1,54 @@
-	[
-		{
-			"essential": true,
-			"image": "${image_url}",
-			"memoryReservation": ${memory},
-			"name": "${container_name}",
-            "command":["--prefix=/jenkins"],
-            "dnsServers":["${consul_ip}","10.0.0.2"],
-			"portMappings": [
-				{
-					"containerPort": ${container_port},
-					"hostPort": ${host_port}
-				},
-				{
-					"containerPort": 50000,
-					"hostPort": 50000
-				}
-			],
-			"environment": [
-                {
-	                "name":"GIT_REPO",
-                    "value":"git@github.com:codecrunchers/helloworld-npm.git"
-                },
-                {
-                    "name":"ECS_CLUSTER",
-                    "value":"${ecs_cluster}"
-                },
-                {
-                    "name":"AWS_ACCOUNT_ID",
-                    "value":"${aws_account_id}"
-                }
-			],
-            "mountPoints": [
-                {
-                    "sourceVolume": "jenkins_home",
-                    "containerPath": "/var/jenkins_home"
-                },
-                {
-                    "sourceVolume": "p9_backups",
-                    "containerPath": "/p9_backups"
-                }
+[
+	{
+		"essential": true,
+		"image": "${image_url}",
+		"memoryReservation": ${memory},
+		"name": "${container_name}",
+		"command":["--prefix=/jenkins"],
+		"dnsServers":["10.171.64.2"],
+		"portMappings": [
+			{
+				"containerPort": ${container_port},
+				"hostPort": ${host_port}
+			},
+			{
+				"containerPort": 50000,
+				"hostPort": 50000
+			}
+		],
+		"environment": [
+			{
+				"name":"GIT_REPO",
+				"value":"git@github.com:codecrunchers/helloworld-npm.git"
+			},
+			{
+				"name":"ECS_CLUSTER",
+				"value":"${ecs_cluster}"
+			},
+			{
+				"name":"AWS_ACCOUNT_ID",
+				"value":"${aws_account_id}"
+			}
+		],
+		"mountPoints": [
+			{
+				"sourceVolume": "jenkins_home",
+				"containerPath": "/var/jenkins_home"
+			},
+			{
+				"sourceVolume": "p9_backups",
+				"containerPath": "/p9_backups"
+			}
 
-            ],
-            "logConfiguration": {
-				"logDriver": "awslogs",
-				"options": {
-					"awslogs-group": "${log_group_name}",
-					"awslogs-region": "${log_group_region}"
-				}
+		],
+		"logConfiguration": {
+			"logDriver": "awslogs",
+			"options": {
+				"awslogs-group": "${log_group_name}",
+				"awslogs-region": "${log_group_region}"
 			}
 		}
-	]
+	}
+]
 
 

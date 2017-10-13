@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "pipeline" {
-  family                = "${format("%s_%s_family", var.environment,lookup(var.pipeline_definition,"name"))}"
+  family                = "${format("%s_%s_family", var.stack_details["env"],lookup(var.pipeline_definition,"name"))}"
   container_definitions = "${data.template_file.jenkins_task_definition_file.rendered}"
 
   volume {
@@ -17,7 +17,7 @@ data "template_file" "jenkins_task_definition_file" {
   template = "${file("${path.module}/templates/task-definition.json")}"
 
   vars {
-    consul_ip        = "${var.consul_private_ip}"
+    consul_ip        = "${var.consul_private_ip}"                                         #TODO: Along with getting DNS frmo CIDR
     image_url        = "${var.docker_image_tag}"
     container_name   = "${lookup(var.pipeline_definition, "name")}"
     log_group_name   = "${lookup(var.ecs_details, "cw_app_pipeline_log_group")}"
