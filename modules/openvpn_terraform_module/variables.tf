@@ -1,5 +1,3 @@
-variable "environment" {}
-
 variable "vpc_id" {}
 
 variable "subnets" {
@@ -15,3 +13,7 @@ variable "vpn_instance_details" {
 }
 
 variable "dns_zone" {}
+
+variable "stack_details" {
+  type = "map"
+}

@@ -1,6 +1,8 @@
+variable "stack_details" {
+  type = "map"
+}
+
 variable "consul_private_ip" {}
-variable "name" {}
-variable "environment" {}
 variable "cluster_name" {}
 
 variable "ssh_key" {}
@@ -46,10 +48,6 @@ variable "vpc_id" {}
 variable "cloudwatch_log_handle" {}
 
 variable "private_subnets" {
-  type = "list"
-}
-
-variable "public_subnets" {
   type = "list"
 }
 

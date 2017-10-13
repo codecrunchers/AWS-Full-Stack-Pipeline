@@ -1,9 +1,7 @@
-#TODO: This has all been imported
-
 resource "aws_security_group" "alb_sg" {
   description = "Controls access to the application ALB"
   vpc_id      = "${var.vpc_id}"
-  name        = "${var.environment}-${var.name}-ecs-sg"
+  name        = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-sg"
 
   ingress {
     protocol  = "tcp"
@@ -24,14 +22,15 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags {
-    Name = "Allow Specified CIDR Blocks to Access Alb"
+    Name        = "Allow Specified CIDR Blocks to Access Alb"
+    Environment = "${var.stack_details["env"]}"
   }
 }
 
 resource "aws_security_group" "ecs_instance_sg" {
   description = "Controls direct access to application instances"
   vpc_id      = "${var.vpc_id}"
-  name        = "${var.environment}-${var.name}-ecs-instsg"
+  name        = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-instsg"
 
   ingress {
     protocol  = "tcp"
@@ -48,7 +47,11 @@ resource "aws_security_group" "ecs_instance_sg" {
     from_port = 22
     to_port   = 22
 
-    cidr_blocks = "${var.private_subnets}"
+    security_groups = [
+      "${aws_security_group.alb_sg.id}",
+    ]
+
+    #    cidr_blocks = ["${var.private_subnets}"] #TODO: Bug
   }
 
   egress {
@@ -59,6 +62,8 @@ resource "aws_security_group" "ecs_instance_sg" {
   }
 
   tags {
-    Name = "ECS/EC2 Allow Range ${var.low_port} to ${var.high_port}"
+    Name       = "ECS/EC2 Allow Range ${var.low_port} to ${var.high_port}"
+    stack_name = ""                                                        #TODO
+    stack_id   = ""                                                        #TODO
   }
 }

@@ -1,62 +1,34 @@
+#Pipeline VPC
 module "vpc_pipeline" {
-  source                     = "modules/vpc_module"
-  name                       = "Pipeline-VPC"                      #TODO Var
-  region                     = "${var.region}"
-  key_name                   = "${aws_key_pair.deployer.key_name}"
-  cidr_block                 = "${var.cidr_block}"
-  external_access_cidr_block = "${var.external_access_cidr_block}"
-  private_subnet_cidr_blocks = "${var.private_subnet_cidr_blocks}"
-  public_subnet_cidr_blocks  = "${var.public_subnet_cidr_blocks}"
-  availability_zones         = "${var.availability_zones}"
-  project                    = "CDPipeline"                        #TODO Didn't use consistently along with name
-  iam_ecs                    = "${module.pipeline_ecs.iam_ecs}"
-  dns_zone_name              = "${var.dns_zone}"
+  source        = "git@github.com:Plnt9/vpc_terraform_module.git"
+  vpc_name      = "p9-pipeline-${var.stack_details["env"]}"
+  stack_details = "${var.stack_details}"
+  vpc_details   = "${var.vpc_details_pipeline}"
+  subnet_cidrs  = "${var.subnet_cidrs_pipeline}"
 }
 
 module "vpn_instance" {
   source                = "modules/openvpn_terraform_module"
-  vpc_id                = "${module.vpc_pipeline.id}"
-  subnets               = "${module.vpc_pipeline.public_subnet_ids}"
+  vpc_id                = "${module.vpc_pipeline.vpc_id}"
+  subnets               = "${module.vpc_pipeline.network_info["red"]}"
   vpn_instance_details  = "${var.vpn_instance_details}"
   whitelist_cidr_blocks = "${var.external_access_cidr_block}"
-  environment           = "${var.environment}"
   dns_zone              = "${var.dns_zone}"
+  stack_details         = "${var.stack_details}"
 }
 
-module "pipeline_ecs" {
-  source             = "modules/ecs_terraform_module"
-  vpc_id             = "${module.vpc.id}"
-  name               = "Pipeline-ECS-Cluster"
-  public_subnets     = "${module.vpc_pipeline.public_subnet_cidr_blocks}"
-  public_subnet_ids  = "${module.vpc_pipeline.public_subnet_ids}"
-  private_subnets    = "${module.vpc_pipeline.private_subnet_cidr_blocks}"
-  private_subnet_ids = "${module.vpc_pipeline.private_subnet_ids}"
-
-  efs_mount_dns = "${module.pipeline_storage.efs_mount_dns}"
-  environment   = "${var.environment}"
-  dns_zone      = "${var.dns_zone}"
-  cluster_name  = "${var.environment}-Pipeline-ECS-Cluster"  #TODO: mmm mmm
-  ssh_key       = "${aws_key_pair.deployer.key_name}"
-
-  whitelist_cidr_blocks = [
-    "${formatlist("%s/32", module.vpc_pipeline.nat_gateway_ips)}",
-    "37.228.251.43/32",
-    "83.70.128.30/32",
-  ] #TODO Vars
-
-  low_port              = 8080                                                                                  #TODO mmmm
-  high_port             = 9000
-  vpc_id                = "${module.vpc_pipeline.id}"
-  ecs_params            = "${var.ecs_params}"
-  cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
-  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition,var.nexus_definition)}"
-  consul_private_ip     = "${module.vpc_pipeline.consul_private_ip}"
+module "pipeline_storage" {
+  source             = "modules/filesystem_terraform_module"
+  environment        = "${var.stack_details["env"]}"
+  name               = "${var.stack_details["stack_name"]}"
+  private_subnet_ids = "${module.vpc_pipeline.network_info["green"]}"
+  vpc_id             = "${module.vpc_pipeline.vpc_id}"
 }
 
 module "cloudwatch_pipeline" {
   source      = "modules/cloudwatch_terraform_module"
-  environment = "${var.environment}"
-  name        = "${var.name}"
+  environment = "${var.stack_details["env"]}"
+  name        = "${var.stack_details["stack_name"]}"
 
   groups = [
     {
@@ -78,81 +50,28 @@ module "cloudwatch_pipeline" {
   ]
 }
 
-module "pipeline_storage" {
-  source             = "modules/filesystem_terraform_module"
-  environment        = "${var.environment}"
-  name               = "${var.name}"
-  private_subnet_ids = "${module.vpc_pipeline.private_subnet_ids}"
-  vpc_id             = "${module.vpc_pipeline.id}"
-}
+module "pipeline_ecs" {
+  source             = "modules/ecs_terraform_module"
+  vpc_id             = "${module.vpc_pipeline.vpc_id}"
+  cluster_name       = "${var.stack_details["stack_name"]}"
+  public_subnet_ids  = "${module.vpc_pipeline.network_info["red"]}"
+  private_subnets    = "${module.vpc_pipeline.network_info["amber"]}"
+  private_subnet_ids = "${module.vpc_pipeline.network_info["amber"]}"
+  efs_mount_dns      = "${module.pipeline_storage.efs_mount_dns}"
+  dns_zone           = "${var.dns_zone}"
+  ssh_key            = "${var.key_name}"
+  stack_details      = "${var.stack_details}"
 
-#Consul Agent for Containers
-module "consul" {
-  source            = "modules/consul_terraform_module"
-  environment       = "${var.environment}"
-  name              = "${var.name}"
-  consul_definition = "${var.consul_definition}"
-  docker_image_tag  = "${var.consul_definition["docker_image_tag"]}"
-  consul_private_ip = "${module.vpc_pipeline.consul_private_ip}"
+  whitelist_cidr_blocks = [
+    "${var.alb_whitelist_cidr_blocks}",
+    "${formatlist("%s/32", module.vpc_pipeline.network_info["nat_ips"])}",
+  ]
 
-  ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.name}/${var.environment}/consul"
-  }
-
-  region = "${var.region}"
-
-  target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #Consul
-}
-
-module "nexus" {
-  source              = "modules/nexus_terraform_module"
-  environment         = "${var.environment}"
-  name                = "${var.name}"
-  pipeline_definition = "${var.nexus_definition}"
-  docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
-  consul_private_ip   = "${module.vpc_pipeline.consul_private_ip}"
-
-  ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"                 #TODO: Refactor these maps, messy
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.name}/${var.environment}/nexus"
-    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
-  }
-
-  region = "${var.region}"
-
-  target_group_id = "${module.pipeline_ecs.target_group_id[2]}" #Nexus
-}
-
-module "jenkins" {
-  source              = "modules/jenkins_terraform_module"
-  environment         = "${var.environment}"
-  name                = "${var.name}"
-  pipeline_definition = "${var.jenkins_pipeline_definition}"
-  docker_image_tag    = "${var.jenkins_pipeline_definition["docker_image_tag"]}"
-  consul_private_ip   = "${module.vpc_pipeline.consul_private_ip}"
-
-  ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.name}/${var.environment}/jenkins"
-    ecs_cluster               = "${module.pipeline_ecs.cluster_name}"
-    aws_account_id            = "${data.aws_caller_identity.current.account_id}"
-  }
-
-  region = "${var.region}"
-
-  target_group_id = "${module.pipeline_ecs.target_group_id[0]}" #Jenkins
-}
-
-module "ecr_repos" {
-  source      = "modules/ecr_terraform_module"
-  environment = "${var.environment}"
-  registries  = ["pipeline/jenkins", "pipeline/consul"] #TODO Vars
-}
-
-resource "aws_key_pair" "deployer" {
-  public_key = ""
+  low_port              = 8080                                                                                  #TODO mmmm
+  high_port             = 9000
+  vpc_id                = "${module.vpc_pipeline.vpc_id}"
+  ecs_params            = "${var.ecs_params}"
+  cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
+  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition,var.nexus_definition)}"
+  consul_private_ip     = "ConsulIP:TODO"                                                                       #"${module.vpc_pipeline.consul_private_ip}"
 }

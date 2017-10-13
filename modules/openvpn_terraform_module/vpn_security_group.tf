@@ -1,5 +1,5 @@
 resource "aws_security_group" "vpn" {
-  name   = "vpn"
+  name   = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-vpn-sg"
   vpc_id = "${var.vpc_id}"
 }
 

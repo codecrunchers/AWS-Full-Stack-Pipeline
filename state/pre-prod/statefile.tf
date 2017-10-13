@@ -48,3 +48,7 @@ provider "aws" {
 
 # We want the account ID in the statefile for other resources
 data "aws_caller_identity" "current" {}
+
+output "account_id" {
+  value = "${data.aws_caller_identity.current.account_id}"
+}

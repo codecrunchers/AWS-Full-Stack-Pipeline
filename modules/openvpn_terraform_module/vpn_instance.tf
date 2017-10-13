@@ -12,22 +12,25 @@ resource "aws_instance" "vpn" {
   }
 
   tags {
-    "Name"       = "${var.environment}-vpn"
-    "stack_name" = "vpn-${var.environment}"
-    "stack_id"   = "0bc300f5-cce5-4224-b63f-446734f2e0a9"
-    ServerRole   = "VPN"
+    "Name"       = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-vpn"
+    "StackName"  = "${var.stack_details["stack_name"]}"
+    "StackId"    = "${var.stack_details["stack_id"]}"
+    "ServerRole" = "VPN"
   }
 }
 
-resource "aws_route53_record" "dns" {
-  zone_id = "${data.aws_route53_zone.primary.zone_id}"
-  name    = "${var.environment}-vpn"
-  type    = "A"
-  ttl     = "300"
-  records = ["${aws_instance.vpn.public_ip}"]
-}
+#TODO: Register DNS
+#resource "aws_route53_record" "dns" {
+#  zone_id = "${data.aws_route53_zone.primary.zone_id}"
+#  name    = "${var.environment}-vpn"
+#  type    = "A"
+#  ttl     = "300"
+#  records = ["${aws_instance.vpn.public_ip}"]
+#}
 
-data "aws_route53_zone" "primary" {
-  name   = "${var.dns_zone}"
-  vpc_id = "${var.vpc_id}"
-}
+
+#data "aws_route53_zone" "primary" {
+#  name   = "${var.dns_zone}"
+#  vpc_id = "${var.vpc_id}"
+#}
+

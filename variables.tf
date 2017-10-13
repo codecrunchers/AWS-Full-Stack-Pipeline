@@ -1,10 +1,34 @@
+#Port
+
+variable "alb_whitelist_cidr_blocks" {
+  type = "list"
+}
+
+variable "subnet_cidrs_pipeline" {
+  type = "map"
+}
+
+variable "vpc_details_pipeline" {
+  type = "map"
+}
+
+variable "stack_details" {
+  type = "map"
+}
+
 variable "vpn_instance_details" {
   type = "map"
+}
+
+variable "vpn_whitelist_cidr_blocks" {
+  type = "list"
 }
 
 variable "ecs_params" {
   type = "map"
 }
+
+# Eo Port
 
 variable "name" {
   default = "Default"

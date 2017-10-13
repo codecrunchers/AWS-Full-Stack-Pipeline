@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "ecs_asgrp" {
-  name                      = "${var.environment}-${var.name}-ecs-asgrp"
+  name                      = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-asgrp"
   vpc_zone_identifier       = ["${var.private_subnet_ids}"]
   min_size                  = "${var.ecs_params["min_instances"]}"
   max_size                  = "${var.ecs_params["max_instances"]}"
@@ -12,13 +12,7 @@ resource "aws_autoscaling_group" "ecs_asgrp" {
 
   tag {
     key                 = "Name"
-    value               = "${var.cluster_name}-ecs-instance"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key                 = "Stream"
-    value               = "Stream Tag"
+    value               = "${var.stack_details["env"]} ECS Host"
     propagate_at_launch = true
   }
 
@@ -34,7 +28,7 @@ resource "aws_autoscaling_group" "ecs_asgrp" {
 }
 
 resource "aws_launch_configuration" "ecs_launch_config" {
-  name_prefix          = "${var.environment}-${var.name}-ecs-launch_configuration"
+  name_prefix          = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-launch_configuration"
   security_groups      = ["${aws_security_group.ecs_instance_sg.id}"]
   image_id             = "${lookup(var.ecs_amis, var.aws_region)}"
   key_name             = "${var.ssh_key}"
@@ -56,7 +50,7 @@ data "template_file" "user_data" {
 
   vars {
     efs_url      = "${var.efs_mount_dns}"
-    p9_env       = "${var.environment}"
+    p9_env       = "${var.stack_details["env"]}"
     cluster_name = "${var.cluster_name}"
     consul_ip    = "${var.consul_private_ip}"
   }

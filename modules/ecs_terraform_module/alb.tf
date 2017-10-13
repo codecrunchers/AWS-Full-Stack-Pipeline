@@ -1,12 +1,12 @@
 resource "aws_alb" "alb" {
-  name            = "${var.environment}-${var.name}-alb"
+  name            = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-alb"
   subnets         = ["${var.public_subnet_ids}"]
   security_groups = ["${aws_security_group.alb_sg.id}"]
 }
 
 resource "aws_alb_target_group" "alb_target_groups" {
   count    = "${length(var.alb_target_groups)}"
-  name     = "${var.environment}-${var.name}-${lookup(var.alb_target_groups[count.index],"name")}"
+  name     = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-${lookup(var.alb_target_groups[count.index],"name")}"
   port     = "${lookup(var.alb_target_groups[count.index],"container_port_to_expose")}"
   protocol = "HTTP"
   vpc_id   = "${var.vpc_id}"

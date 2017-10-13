@@ -1,20 +1,8 @@
-##Port
-
-alb_whitelist_cidr_blocks = [
-  "37.228.251.43/32", //Alan Home
-  "86.44.120.159/32", //Joe Home
-  "83.70.128.30/32",  //Office
-  "52.51.124.44/32",  //AWS
-  "52.212.38.150/32", //AWS
-  "192.30.252.0/22",  //github
-  "185.199.108.0/22", //GitHub
-]
-
 stack_details = {
   env         = "pre-prod"                             #Ideally Injected by Pipeline
   region      = "eu-west-1"
   stack_id    = "fedd1ace-6766-4c95-a1c4-72a8b3f56a4b"
-  stack_name  = "Pipeline"
+  stack_name  = "pipeline"
   stack_owner = "tech@planet9energy.com"
 }
 
@@ -30,18 +18,9 @@ subnet_cidrs_pipeline {
   vpc_cidr_block_red   = ["10.171.77.128/25", "10.171.78.0/25", "10.171.78.128/25"]
 }
 
-vpn_instance_details = {
-  ami      = "ami-015fbb78"
-  size     = "t2.micro"
-  key_name = "dselete-me-rds-verify"
-}
+dns_zone = "cd-pipeline.io"
 
-vpn_whitelist_cidr_blocks = ["83.70.128.30/32"]
-
-##EO Port
-dns_zone = "p9e.io"
-
-key_name = "dselete-me-rds-verify"
+key_name = "pipeline-ecs"
 
 cidr_block = "10.0.0.0/16"
 
@@ -59,6 +38,12 @@ qa_vpc = {
   private_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.3.0/24"]
 
   availability_zones = ["eu-west-1a", "eu-west-1b"]
+}
+
+vpn_instance_details = {
+  ami      = "ami-015fbb78"
+  size     = "t2.micro"
+  key_name = "pipeline-ecs"
 }
 
 consul_definition = {
