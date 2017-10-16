@@ -115,8 +115,39 @@ module "jenkins" {
   target_group_id = "${module.pipeline_ecs.target_group_id[0]}" #Jenkins
 }
 
+module "sonar_db" {
+  source                = "git@github.com:Plnt9/rds_terraform_module.git"
+  stack_details         = "${var.stack_details}"
+  instance_details      = "${var.sonar_db_instance}"
+  rds_subnets           = "${module.vpc_pipeline.network_info["green"]}"
+  vpc_id                = "${module.vpc_pipeline.vpc_id}"
+  whitelist_cidr_blocks = ["10.171.64.0/20"]                              #allow database to talk to peered pipeline vpc
+}
+
+module "sonar" {
+  source = "modules/sonar_terraform_module"
+
+  pipeline_definition = "${var.sonar_pipeline_definition}"
+  docker_image_tag    = "${var.sonar_pipeline_definition["docker_image_tag"]}"
+  consul_private_ip   = "Consul.IP"                                            #${module.vpc_pipeline.consul_private_ip}"
+  region              = "${var.region}"
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"                                    #TODO: Refactor these maps, messy
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/nexus"
+    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
+  }
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #TODO: hcoded Full list needed
+  stack_details   = "${var.stack_details}"
+
+  rds_details  = "${var.sonar_db_instance}"
+  rds_endpoint = "${module.sonar_db.db_host}"
+}
+
 module "ecr_repos" {
   source      = "modules/ecr_terraform_module"
   environment = "${var.stack_details["env"]}"
-  registries  = ["pipeline/jenkins", "pipeline/consul"] #TODO Vars
+  registries  = ["pipeline/jenkins", "pipeline/consul", "pipeline/sonar", "pipeline/nexus"] #TODO Vars
 }

@@ -1,5 +1,9 @@
 #Port
 
+variable "sonar_db_instance" {
+  type = "map"
+}
+
 variable "alb_whitelist_cidr_blocks" {
   type = "list"
 }
@@ -73,6 +77,10 @@ variable "external_access_cidr_block" {
 variable "dns_zone" {}
 
 variable "jenkins_pipeline_definition" {
+  type = "map"
+}
+
+variable "sonar_pipeline_definition" {
   type = "map"
 }
 

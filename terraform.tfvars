@@ -16,7 +16,7 @@ stack_details = {
   env         = "pre-prod"                             #Ideally Injected by Pipeline
   region      = "eu-west-1"
   stack_id    = "8d49e858-6414-45b2-b00a-18256265c40c"
-  stack_name  = "Pipeline"
+  stack_name  = "pipeline"
   stack_owner = "tech@planet9energy.com"
 }
 
@@ -73,6 +73,26 @@ jenkins_pipeline_definition = {
   container_port_to_expose   = "8080"
   instance_memory_allocation = "512"
   instance_count             = "1"
+}
+
+sonar_pipeline_definition = {
+  docker_image_tag           = "234585392744.dkr.ecr.eu-west-1.amazonaws.com/pre-prod-p9-pipeline/sonar:latest"
+  name                       = "sonarjs"                                                                        #hcoded
+  context                    = "sonar"
+  host_port_to_expose        = 9000                                                                             #hcoded
+  container_port_to_expose   = "9000"
+  instance_memory_allocation = 2048                                                                             #hcoded
+  instance_count             = "1"
+}
+
+sonar_db_instance = {
+  size               = "db.t2.small"
+  engine_version     = "9.5.2"
+  name               = "sonardb"
+  username           = "root"
+  password           = "09812983h21kjt0d0!!" # see provisioner and local exec in RDS resource, we will migrate to that3
+  multi_az           = true
+  storage_allocation = 5
 }
 
 ecs_params = {

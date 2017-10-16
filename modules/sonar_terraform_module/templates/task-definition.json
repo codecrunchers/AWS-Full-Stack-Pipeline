@@ -1,0 +1,39 @@
+[	
+	{
+		"image": "${image_url}",
+		"portMappings": [
+			{
+				"containerPort": ${container_port},
+				"hostPort": ${host_port}
+			}
+		],
+		"essential": true,
+		"memory": ${memory},
+		"name": "sonarjs",
+		"logConfiguration": {
+			"logDriver": "awslogs",
+			"options": {
+				"awslogs-group": "${log_group_name}",
+				"awslogs-region": "${log_group_region}"
+			}
+		},
+		"environment": [
+		{
+				"name":"SONARQUBE_JDBC_USERNAME",
+				"value":"${rds_username}"
+			},
+			{
+				"name":"SONARQUBE_JDBC_PASSWORD",
+				"value":"${rds_password}"
+			},
+			{
+				"name":"SONARQUBE_JDBC_URL",
+				"value":"jdbc:postgresql://${rds_connection_string}:5432/sonardb"
+			},
+			{
+				"name":"MINUS_D_PARAMS",
+				"value":" -Dsonar.web.context=/sonar "
+			}
+		]
+	}
+]

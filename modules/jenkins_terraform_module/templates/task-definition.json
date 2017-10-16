@@ -19,7 +19,7 @@
 		"environment": [
 			{
 				"name":"GIT_REPO",
-				"value":"git@github.com:codecrunchers/helloworld-npm.git"
+				"value":"https://github.com/codecrunchers/helloworld-npm.git"
 			},
 			{
 				"name":"ECS_CLUSTER",
