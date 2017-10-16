@@ -50,6 +50,6 @@ resource "aws_alb_listener_rule" "routing_rules" {
 
   condition {
     field  = "path-pattern"
-    values = ["/${lookup(var.alb_target_groups[count.index],"name")}/*"]
+    values = ["/${lookup(var.alb_target_groups[count.index],"context")}/*"]
   }
 }

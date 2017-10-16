@@ -7,7 +7,7 @@ resource "aws_efs_file_system" "ecs_storage" {
 }
 
 variable "mt_target_count_workaround" {
-  default = "2"
+  default = "3"
 }
 
 resource "aws_efs_mount_target" "efs_mt" {

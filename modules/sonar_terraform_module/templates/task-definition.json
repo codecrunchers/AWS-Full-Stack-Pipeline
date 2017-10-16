@@ -32,7 +32,7 @@
 			},
 			{
 				"name":"MINUS_D_PARAMS",
-				"value":" -Dsonar.web.context=/sonar "
+				"value":" -Dsonar.web.context=/${context} "
 			}
 		]
 	}

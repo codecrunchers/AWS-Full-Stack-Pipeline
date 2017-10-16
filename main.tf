@@ -148,6 +148,7 @@ module "sonar_db" {
   rds_subnets           = "${module.vpc_pipeline.network_info["green"]}"
   vpc_id                = "${module.vpc_pipeline.vpc_id}"
   whitelist_cidr_blocks = ["10.171.64.0/20"]                              #allow database to talk to peered pipeline vpc
+  encrypted             = "${var.sonar_db_instance["db_encrypted"]}"      #Make it clear, remove from map
 }
 
 module "ecr_repos" {

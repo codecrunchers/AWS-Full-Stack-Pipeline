@@ -19,5 +19,6 @@ data "template_file" "sonar_task_definition_file" {
     rds_username          = "${var.rds_details["username"]}"
     rds_password          = "${var.rds_details["password"]}"
     rds_connection_string = "${var.rds_endpoint}"
+    context               = "${var.pipeline_definition["context"]}"
   }
 }

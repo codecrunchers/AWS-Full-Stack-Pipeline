@@ -62,7 +62,7 @@ nexus_definition = {
   host_port_to_expose        = "8081"
   container_port_to_expose   = "8081"
   instance_memory_allocation = "1024"
-  instance_count             = "1"
+  instance_count             = 1
 }
 
 jenkins_pipeline_definition = {
@@ -71,28 +71,29 @@ jenkins_pipeline_definition = {
   context                    = "jenkins"
   host_port_to_expose        = "8080"
   container_port_to_expose   = "8080"
-  instance_memory_allocation = "512"
-  instance_count             = "1"
+  instance_memory_allocation = "1024"
+  instance_count             = 1
 }
 
 sonar_pipeline_definition = {
-  docker_image_tag           = "234585392744.dkr.ecr.eu-west-1.amazonaws.com/pre-prod-p9-pipeline/sonar:latest"
-  name                       = "sonarjs"                                                                        #hcoded
+  docker_image_tag           = "234585392744.dkr.ecr.eu-west-1.amazonaws.com/pre-prod-pipeline/sonar" #hcoded
+  name                       = "sonarjs"                                                              #hcoded
   context                    = "sonar"
-  host_port_to_expose        = 9000                                                                             #hcoded
+  host_port_to_expose        = "9000"                                                                 #hcoded
   container_port_to_expose   = "9000"
-  instance_memory_allocation = 2048                                                                             #hcoded
-  instance_count             = "1"
+  instance_memory_allocation = 1024                                                                   #hcod
+  instance_count             = 1
 }
 
 sonar_db_instance = {
-  size               = "db.t2.small"
+  size               = "db.t2.micro"
   engine_version     = "9.5.2"
   name               = "sonardb"
   username           = "root"
   password           = "09812983h21kjt0d0!!" # see provisioner and local exec in RDS resource, we will migrate to that3
   multi_az           = true
   storage_allocation = 5
+  db_encrypted       = false
 }
 
 ecs_params = {
