@@ -1,5 +1,6 @@
 /* ecs iam role and policies */
 resource "aws_iam_role" "ecs_role" {
+  name               = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-role"
   name               = "${var.cluster_name}-ecs-role"
   assume_role_policy = "${file("${path.module}/policies/ecs-role.json")}"
 }
@@ -59,7 +60,7 @@ resource "aws_iam_role_policy" "terraform_base_policy" {
  * IAM profile to be used in auto-scaling launch configuration.
  */
 resource "aws_iam_instance_profile" "ecs" {
-  name = "${var.cluster_name}-ecs-instance-profile"
+  name = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-ecs-instance-profile"
   path = "/"
   role = "${aws_iam_role.ecs_role.name}"
 }

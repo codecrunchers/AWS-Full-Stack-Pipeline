@@ -12,10 +12,11 @@ resource "aws_instance" "vpn" {
   }
 
   tags {
-    "Name"       = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-vpn"
-    "stack_name" = "${var.stack_details["stack_name"]}"
-    "stack_id"   = "${var.stack_details["stack_id"]}"
-    "ServerRole" = "VPN"
+    Name        = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-vpn"
+    stack_name  = "${var.stack_details["stack_name"]}"
+    stack_id    = "${var.stack_details["stack_id"]}"
+    ServerRole  = "VPN"
+    Environment = "${var.stack_details["env"]}"
   }
 }
 

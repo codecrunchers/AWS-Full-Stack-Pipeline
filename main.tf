@@ -32,28 +32,32 @@ module "cloudwatch_pipeline" {
 
   groups = [
     {
-      name              = "ecs-pipeline-container"
+      name              = "ecs-pipeline-container" #0
       retention_in_days = 14
     },
     {
-      name              = "jenkins"
+      name              = "jenkins" #1
       retention_in_days = 14
     },
     {
-      name              = "consul"
+      name              = "nexus" #2
       retention_in_days = 14
     },
     {
-      name              = "nexus"
+      name              = "sonar" #3
       retention_in_days = 14
     },
   ]
 }
 
+# Enables target groups
+#1. Jenkins 8080
+#2. Nexus 8001
+#3. Sonar 9000
 module "pipeline_ecs" {
   source             = "modules/ecs_terraform_module"
   vpc_id             = "${module.vpc_pipeline.vpc_id}"
-  cluster_name       = "${var.stack_details["stack_name"]}"
+  cluster_name       = "${var.stack_details["env"]}-${var.stack_details["stack_name"]}-cluster"
   public_subnet_ids  = "${module.vpc_pipeline.network_info["red"]}"
   private_subnets    = "${module.vpc_pipeline.network_info["amber"]}"
   private_subnet_ids = "${module.vpc_pipeline.network_info["amber"]}"
@@ -67,32 +71,13 @@ module "pipeline_ecs" {
     "${formatlist("%s/32", module.vpc_pipeline.network_info["nat_ips"])}",
   ]
 
-  low_port              = 8080                                                                                  #TODO mmmm
+  low_port              = 8080                                                                                          #TODO mmmm
   high_port             = 9000
   vpc_id                = "${module.vpc_pipeline.vpc_id}"
   ecs_params            = "${var.ecs_params}"
   cloudwatch_log_handle = "${module.cloudwatch_pipeline.cw_handle[0]}"
-  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.consul_definition,var.nexus_definition)}"
-  consul_private_ip     = "ConsulIP:TODO"                                                                       #"${module.vpc_pipeline.consul_private_ip}"
-}
-
-module "nexus" {
-  stack_details       = "${var.stack_details}"
-  source              = "modules/nexus_terraform_module"
-  pipeline_definition = "${var.nexus_definition}"
-  docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
-  consul_private_ip   = "ConsulIP:TODO"                               #"${module.vpc_pipeline.consul_private_ip}"d
-
-  ecs_details = {
-    cluster_id                = "${module.pipeline_ecs.cluster_id}"                                    #TODO: Refactor these maps, messy
-    iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/nexus"
-    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
-  }
-
-  region = "${var.region}"
-
-  target_group_id = "${module.pipeline_ecs.target_group_id[2]}" #Nexus
+  alb_target_groups     = "${list(var.jenkins_pipeline_definition,var.nexus_definition,var.sonar_pipeline_definition)}"
+  consul_private_ip     = "ConsulIP:TODO"                                                                               #"${module.vpc_pipeline.consul_private_ip}"
 }
 
 module "jenkins" {
@@ -115,13 +100,23 @@ module "jenkins" {
   target_group_id = "${module.pipeline_ecs.target_group_id[0]}" #Jenkins
 }
 
-module "sonar_db" {
-  source                = "git@github.com:Plnt9/rds_terraform_module.git"
-  stack_details         = "${var.stack_details}"
-  instance_details      = "${var.sonar_db_instance}"
-  rds_subnets           = "${module.vpc_pipeline.network_info["green"]}"
-  vpc_id                = "${module.vpc_pipeline.vpc_id}"
-  whitelist_cidr_blocks = ["10.171.64.0/20"]                              #allow database to talk to peered pipeline vpc
+module "nexus" {
+  stack_details       = "${var.stack_details}"
+  source              = "modules/nexus_terraform_module"
+  pipeline_definition = "${var.nexus_definition}"
+  docker_image_tag    = "${var.nexus_definition["docker_image_tag"]}"
+  consul_private_ip   = "ConsulIP:TODO"                               #"${module.vpc_pipeline.consul_private_ip}"d
+
+  ecs_details = {
+    cluster_id                = "${module.pipeline_ecs.cluster_id}"                                    #TODO: Refactor these maps, messy
+    iam_role                  = "${module.pipeline_ecs.iam_role}"
+    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/nexus"
+    jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
+  }
+
+  region = "${var.region}"
+
+  target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #Nexus
 }
 
 module "sonar" {
@@ -135,15 +130,24 @@ module "sonar" {
   ecs_details = {
     cluster_id                = "${module.pipeline_ecs.cluster_id}"                                    #TODO: Refactor these maps, messy
     iam_role                  = "${module.pipeline_ecs.iam_role}"
-    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/nexus"
+    cw_app_pipeline_log_group = "${var.stack_details["stack_name"]}/${var.stack_details["env"]}/sonar"
     jenkins_ip                = "http://jenkinsci-8080.service.consul:8080/jenkins"
   }
 
-  target_group_id = "${module.pipeline_ecs.target_group_id[1]}" #TODO: hcoded Full list needed
+  target_group_id = "${module.pipeline_ecs.target_group_id[2]}" #TODO: hcoded Full list needed
   stack_details   = "${var.stack_details}"
 
   rds_details  = "${var.sonar_db_instance}"
   rds_endpoint = "${module.sonar_db.db_host}"
+}
+
+module "sonar_db" {
+  source                = "git@github.com:Plnt9/rds_terraform_module.git"
+  stack_details         = "${var.stack_details}"
+  instance_details      = "${var.sonar_db_instance}"
+  rds_subnets           = "${module.vpc_pipeline.network_info["green"]}"
+  vpc_id                = "${module.vpc_pipeline.vpc_id}"
+  whitelist_cidr_blocks = ["10.171.64.0/20"]                              #allow database to talk to peered pipeline vpc
 }
 
 module "ecr_repos" {

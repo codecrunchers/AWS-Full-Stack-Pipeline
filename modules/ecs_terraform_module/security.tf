@@ -24,6 +24,8 @@ resource "aws_security_group" "alb_sg" {
   tags {
     Name        = "Allow Specified CIDR Blocks to Access Alb"
     Environment = "${var.stack_details["env"]}"
+    stack_id    = "${var.stack_details["stack_id"]}"
+    stack_name  = "${var.stack_details["stack_name"]}"
   }
 }
 
@@ -62,8 +64,9 @@ resource "aws_security_group" "ecs_instance_sg" {
   }
 
   tags {
-    Name       = "ECS/EC2 Allow Range ${var.low_port} to ${var.high_port}"
-    stack_name = ""                                                        #TODO
-    stack_id   = ""                                                        #TODO
+    Name        = "ECS/EC2 Allow Range ${var.low_port} to ${var.high_port}"
+    stack_id    = "${var.stack_details["stack_id"]}"
+    stack_name  = "${var.stack_details["stack_name"]}"
+    Environment = "${var.stack_details["env"]}"
   }
 }
