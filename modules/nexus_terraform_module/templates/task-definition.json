@@ -1,0 +1,33 @@
+	[
+		{
+			"essential": true,
+			"image": "${image_url}",
+			"memoryReservation": ${memory},
+			"name": "${container_name}",
+			"portMappings": [
+				{
+					"containerPort": ${container_port},
+					"hostPort": ${host_port}
+				}
+			],
+			"environment": [
+				{
+					"name": "NEXUS_WEBAPP_CONTEXT_PATH",
+					"value": "nexus"
+				},
+                {
+                    "name":"JENKINS_HOST",
+                    "value":"${jenkins_host}"
+                }
+			],
+            "logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "${log_group_name}",
+					"awslogs-region": "${log_group_region}"
+				}
+			}
+		}
+	]
+
+

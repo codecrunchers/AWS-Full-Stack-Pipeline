@@ -1,0 +1,24 @@
+[
+    {
+        "image": "${image_url}",
+        "networkMode": "host",
+        "memoryReservation": ${memory},
+        "name": "${container_name}",
+        "command": [
+            "-join",
+            "${consul_ip}",
+            "-dc",
+            "${region}"
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}"
+            }
+        }
+    }
+]
+
+
+
