@@ -1,3 +1,5 @@
+This is pretty out of date/needs some love - ping me if you are interested.
+
 # Enterprise Development and Deployment
 ## An ECS managed Docker auto scaling CI/CD Pipeline with a Release Environments for AWS
 
